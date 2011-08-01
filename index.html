@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+    <title>XC1 slider</title>
+    <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen">
+</head>
+
+<body>
+	<div id="wrapper">
+		<div id="container">
+			<header>
+				<h1>XC1 Slider</h1>
+			</header>
+			<div id="main">
+					
+					<!-- The slider markup -->
+					<div id="slider">
+							<ul>
+								<li>First slide</li>
+								<li>Second slide</li>
+								<li>
+									<iframe src="http://player.vimeo.com/video/16917950?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff" width="800" height="450" frameborder="0"></iframe>
+									</li>
+								<li>Fourth slide</li>
+							</ul>
+					</div>
+		
+					<!-- Basic slider info -->
+					<div id="slider-info">
+						<h2>Usage</h2>
+						<h3>Slider markup</h3>
+						<h4>HTML</h4>
+						<code>
+							<div id="slider">
+								<ul>
+									<li>First slide</li>
+									<li>Second slide</li>
+									<li>Third slide</li>
+									<li>Fourth slide</li>
+								</ul>
+							</div>
+						</code>
+						<h4>Javascript</h4>
+						<code></code>
+						<h3>Slider genrated markup</h3>
+						<code></code>
+						<h2>Usage and copyright</h2>
+						<p></p>
+					</div>
+					
+			</div>
+			<footer>
+				
+			</footer>
+		</div>
+	</div>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script> <!-- jQuery 1.5.2 -->
+	<script type="text/javascript" src="javascripts/jquery-xc1-slider.js"></script><!-- XC1 slider -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#slider').xc1Slider();
+		});
+	</script>
+</body></html>
