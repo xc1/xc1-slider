@@ -3,6 +3,7 @@
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
     <title>XC1 slider</title>
     <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="stylesheets/dessert.css" type="text/css" media="screen" />
 </head>
 
 <body>
@@ -30,8 +31,8 @@
 						<h2>Usage</h2>
 						<h3>Slider markup</h3>
 						<h4>HTML</h4>
-						<code>
-							<div id="slider">
+						<pre class="prettyprint"><code class="language-java">
+							<div>
 								<ul>
 									<li>First slide</li>
 									<li>Second slide</li>
@@ -39,13 +40,18 @@
 									<li>Fourth slide</li>
 								</ul>
 							</div>
-						</code>
+						</code></pre>
 						<h4>Javascript</h4>
-						<code></code>
+						<pre><code></code></pre>
 						<h3>Slider genrated markup</h3>
-						<code></code>
+						<pre><code></code></pre>
 						<h2>Usage and copyright</h2>
 						<p></p>
+						<pre class="prettyprint">
+						(function() {
+						  var jsSyntaxHighlighting = 'rocks';
+						})();
+						</pre>
 					</div>
 					
 			</div>
@@ -56,9 +62,11 @@
 	</div>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script> <!-- jQuery 1.5.2 -->
 	<script type="text/javascript" src="javascripts/jquery-xc1-slider.js"></script><!-- XC1 slider -->
+	<script type="text/javascript" src="javascripts/highlighter/prettify.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('#slider').xc1Slider();
+			prettyPrint();
 		});
 	</script>
 </body></html>

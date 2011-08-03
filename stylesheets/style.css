@@ -1,6 +1,6 @@
 /* Basic markup styling */
 html { background: url('../images/html.jpg') repeat #333; color: #CCC; padding: 0px; margin: 0px; }
-body { background: url('../images/body.jpg') repeat-x; color: #CCC; padding: 0px; margin: 0px; }
+body { background: url('../images/body.jpg') repeat-x; color: #CCC; padding: 0px; margin: 0px; font-family: Helvetica, Arial, Verdana, Geneva, sans-serif;  }
 #wrapper { background: url('../images/wrapper.jpg') no-repeat top center; width: 100%; }
 #wrapper #container { width: 960px; margin: 0px auto; }
 
