@@ -16,7 +16,7 @@
 					<!-- The slider markup -->
 					<div id="slider">
 							<ul>
-								<li>First slide</li>
+								<li><img src="images/test-slide-1.png" /></li>
 								<li>Second slide</li>
 								<li>
 									<iframe src="http://player.vimeo.com/video/16917950?title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff" width="800" height="450" frameborder="0"></iframe>
@@ -30,18 +30,22 @@
 						<h2>Usage</h2>
 						<h3>Slider markup</h3>
 						<h4>HTML</h4>
-						<pre class="prettyprint">
-&lt;div id=&quot;slider&quot;&gt;
+						<pre class="prettyprint">&lt;div id=&quot;slider&quot;&gt;
 	&lt;ul&gt;
 		&lt;li&gt;First slide&lt;/li&gt;
 		&lt;li&gt;Second slide&lt;/li&gt;
 		&lt;li&gt;Third slide&lt;/li&gt;
 		&lt;li&gt;Fourth slide&lt;/li&gt;
 	&lt;/ul&gt;
-&lt;/div&gt;
-						</pre>
+&lt;/div&gt;</pre>
 						<h4>Javascript</h4>
-						<pre><code></code></pre>
+						<p>Add this code to your footer just before your &lt;/body&gt; tag.
+						<pre class="prettyprint"><code>&lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"&gt;&lt;/script>
+&lt;script type="text/javascript" src="javascripts/jquery-xc1-slider.js"&gt;&lt;/script&gt; &lt;!-- XC1 slider --&gt;</code></pre>
+						<p>Then add this line of codes to your javascript
+						<pre class="prettyprint"><code>$(document).ready(function() {
+	$('#slider').xc1Slider();
+});</code></pre>
 						<h3>Slider genrated markup</h3>
 						<pre><code></code></pre>
 						<h2>Usage and copyright</h2>
@@ -59,7 +63,7 @@
 			</footer>
 		</div>
 	</div>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script> <!-- jQuery 1.5.2 -->
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> <!-- jQuery 1.6.2 -->
 	<script type="text/javascript" src="javascripts/jquery-xc1-slider.js"></script><!-- XC1 slider -->
 	<script type="text/javascript" src="javascripts/highlighter/prettify.js"></script>
 	<script type="text/javascript">
