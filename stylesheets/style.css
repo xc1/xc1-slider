@@ -8,6 +8,10 @@ body { background: url('../images/body.jpg') repeat-x; color: #CCC; text-shadow:
 h1, h2 , h3, h4 { margin: 0px; padding: 2.0em 0 0.5em 0; }
 /* Generated markup styling */
 
+#github-download { background: url('../images/github-download.png') no-repeat top center; display: block; text-indent: -99999px; overflow: hidden; width: 290px; height: 96px; float: right; margin-left: 20px; }
+#github-fork { background: url('../images/github-fork.png') no-repeat top center; display: block; text-indent: -99999px; overflow: hidden; width: 141px; height: 141px; position: absolute; top: 0px; left: 0px; }
+
+ a:focus { outline: none; }
 
 #slider-nav-ul { height: 0px; position: absolute; top: 0px; left: 0px; overflow: visible; width: 960px; margin: 0; padding: 0px; }
 	#slider-nav-ul li { list-style-type: none; }
