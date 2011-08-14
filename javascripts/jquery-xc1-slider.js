@@ -1,17 +1,20 @@
-/*
- * Carousel
- */
 (function($){
 	$.fn.xc1Slider = function () {
-		
 		// Append the extra
 			//Wrap the slider in 
 			$('ul', this).wrap('<div id="slider-container" />');
-			// Append the manual next and prev
-			$(this).append('<div id="slider-manual-nav-container"></div>');
-			// Append the manual nav 
+			// Append the manual next and prev links
+			$(this).append('<div id="slider-manual-nav-container"><ul id="slider-manual-nav"></ul></div>');
+			// Append the manual nav links
 			$(this).append('<div id="slider-manual-container"><ul id="slider-nav-ul"><li id="left-arrow"><a class="back" href="#" title="Previous">&lt;</a></li><li id="right-arrow"><a class="forward" href="#" title="Next">&gt;</a></li></ul></div>');
-			
+		
+		// Set the variables
+		var $wrapper = $('#slider-container');
+            $slider = $wrapper.find('> ul'),
+            $items = $slider.find('> li'),
+            $single = $items.filter(':first'),
+		
+		
 		/*
 		 * Manual navigation
 		 */
@@ -22,7 +25,7 @@
 			
 			$(this).addClass('active');
 			navVal = navVal.replace('#', '');
-			$('#slider-container').trigger('goto', parseInt(navVal, 10)); // Needs fixxx
+			$slider.trigger('goto', parseInt(navVal, 10));
 			
 			return false;
 		});
@@ -30,26 +33,21 @@
 		/*
 		 * Add all links to the manual navigation area
 		 */
-		var listcount = $(this).find('> ul').find('> li').size(),
+		var listcount = $slider.find('> li').size(),
 			appendlist = '';
 		
 		for (i = 1; i <= listcount; i++) {
-			appendlist = appendlist + '<li><a href="#'+i+'" ' + (i==1?'class="active"':'') + '>i</a></li>';
+			appendlist = appendlist + '<li><a href="#'+i+'" ' + (i==1?'class="active"':'') + '> </a></li>';
 		}
 		
-		$('#slider-manual-nav-container').append('<ul id="slider-manual-nav">'+appendlist+'</ul>');
+		$('#slider-manual-nav').append(appendlist);
 		
 	    function repeat(str, num) {
 	        return new Array( num + 1 ).join( str );
 	    }
   
 	    return this.each(function () {
-	        var $wrapper = $('#slider-container'),
-	            $slider = $wrapper.find('> ul'),
-	            $items = $slider.find('> li'),
-	            $single = $items.filter(':first'),
-            
-	            singleWidth = $single.outerWidth(), 
+	        var singleWidth = $single.outerWidth(), 
 	            visible = Math.ceil($wrapper.innerWidth() / singleWidth), // note: doesn't include padding or border
 	            currentPage = 1,
 	            pages = Math.ceil($items.length / visible);            

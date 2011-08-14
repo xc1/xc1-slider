@@ -1,6 +1,6 @@
 /* Basic markup styling */
 html { background: url('../images/html.jpg') repeat #333; color: #CCC; padding: 0px; margin: 0px; }
-body { background: url('../images/body.jpg') repeat-x; color: #CCC; padding: 0px; margin: 0px; font-family: Helvetica, Arial, Verdana, Geneva, sans-serif;  }
+body { background: url('../images/body.jpg') repeat-x; color: #CCC; text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5); padding: 0px; margin: 0px; font-family: Helvetica, Arial, Verdana, Geneva, sans-serif;  }
 #wrapper { background: url('../images/wrapper.jpg') no-repeat top center; width: 100%; }
 #wrapper #container { width: 960px; margin: 0px auto; }
 
@@ -20,12 +20,11 @@ h1, h2 , h3, h4 { margin: 0px; padding: 2.0em 0 0.5em 0; }
 #slider-container ul { width:9999px; position: absolute; top:0; left:0; margin:0px; padding: 0px; }
 #slider-container ul li { margin: 0px; padding: 0px; float:left; list-style:none; height: 450px; width: 800px; }
 	
-#slider-manual-nav-container { height:50px; position:relative; }
-	#slider-manual-nav {  width:150px; height:20px; }
-	 #slider-manual-nav li { list-style:none; padding-top:10px; padding-left: 5px; float:left;  }
-		#slider-manual-nav li:first-child { margin-left:0px; }
-		#slider-manual-nav li a { text-indent: -9999px; height:10px; width:10px; float:left; background:#ccc; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; -moz-border-radius-bottomright: 5px; -moz-border-radius-bottomleft: 5px; -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px; -webkit-border-bottom-left-radius: 5px; -webkit-border-bottom-right-radius: 5px; }
-			#slider-manual-nav li a.active {  background:#000000; }
+#slider-manual-nav-container { height:50px; position:relative; text-align: center; }
+	#slider-manual-nav { height:20px; padding: 0px; }
+	 #slider-manual-nav li { list-style:none; display: inline; }
+		#slider-manual-nav li a { background: rgba(81, 202, 255, 0.5); text-indent: -9999px; height:12px; width:12px; margin: 0px 4px; display: inline-block; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; -webkit-box-shadow:0 2px 3px rgba(0, 0, 0, 1); -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 1); box-shadow: 0 2px 3px rgba(0, 0, 0, 1); border-top: 1px solid rgba(255, 255, 255, 0.2); }
+			#slider-manual-nav li a.active { background: rgba(142, 221, 255, 1); }
 		
 	
 /* Lifted corners */
