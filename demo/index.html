@@ -31,7 +31,7 @@
 			<div id="main">
 					
 				<!-- The slider markup -->
-				<div id="slider">
+				<div class="slider">
 					<ul>
 						<li><img src="images/slide-1.png" /></li>
 						<li><img src="images/slide-2.png" /></li>
@@ -95,13 +95,12 @@
 	<!-- Trigger plugin -->
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$('#slider').xc1Slider({
+			$('.slider').xc1Slider({
 				slideAuto: true,
 				slideEffect: 'slide',
 				slideTime: 500, //
 				slideDelay: 3000, //
 				slideWidth: 'dynamic'
-				nav
 			});
 			prettyPrint();
 		});
