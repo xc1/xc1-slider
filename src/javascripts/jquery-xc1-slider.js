@@ -18,7 +18,7 @@
 		/*
 		 * Manual navigation
 		 */
-		$("ul#slider-manual-nav a").live('click', function () {
+		$("ul#slider-manual-nav a").on('click', function () {
 			var navVal = $(this).attr("href");
 			
 			$('#slider-manual-nav li a.active').removeClass('active');

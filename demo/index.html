@@ -15,6 +15,8 @@
     <title>XC1 slider</title>
     
 	<link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="../src/stylesheets/xc1-slider.css" type="text/css" media="screen">
+	
 	<link href="images/xc1-favicon.png" type="image/png" rel="shortcut icon">
 	<link href="images/xc1-iphone.png" rel="apple-touch-icon-precomposed">
 
@@ -79,12 +81,20 @@
 			</footer>
 		</div>
 	</div>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> <!-- jQuery 1.6.2 -->
-	<script type="text/javascript" src="javascripts/jquery-xc1-slider.js"></script><!-- XC1 slider -->
+	
+	<!-- Plugin files -->
+	<script type="text/javascript" src="../src/javascripts/jquery-1.9.1.min.js"></script> <!-- jQuery 1.9.1 -->
+	<script type="text/javascript" src="../src/javascripts/jquery-xc1-slider.js"></script><!-- XC1 slider -->
+	
+	<!-- Demo files -->
 	<script type="text/javascript" src="javascripts/highlighter/prettify.js"></script>
+	
+	<!-- Trigger plugin -->
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$('#slider').xc1Slider();
+			$('#slider').xc1Slider({
+				
+			});
 			prettyPrint();
 		});
 	</script>
