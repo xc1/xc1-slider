@@ -9,26 +9,38 @@
 	slider.vars = $.extend({}, $.xc1Slider.defaults, options);
 	slider.markup = {
 		container: $('<div class="slider-container" />'),
-		slides: true,
-		slide: true
+		slides: slider.find('ul').addClass('slider-slides'),
+		slide: slider.find('li').addClass('slide')
 	}
 	slider.nav = {
 		container: $('<div class="slider-nav-container"></div>'), 
 		pagination: $('<ul class="slider-nav-pagination"></ul>'), 
 		direction: $('<ul class="slider-nav-direction"></ul>'), 
-		forward: $('<li class="slider-nav-forward"><a href="#" title="Previous">&lt;</a></li>'),
-		backward: $('<li class="slider-nav-backward"><a href="#" title="Next">&gt;</a></li>')
+		forward: $('<li class="slider-nav-forward">&lt;</li>'),
+		backward: $('<li class="slider-nav-backward">&gt;</li>')
 	};
-	
-	slider.markup.slides = slider.find('.slider-slides');
-	slider.markup.slide = slider.find('.slide');
 	
 	var varInterval;
 	var varIntervalSpeed;
+
+	// Add markup
+	slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
+	
+	// Append the manual nav
+	slider.append(slider.nav.container)
+	
+	slider.nav.container.append(slider.nav.pagination);
+	slider.nav.container.append(slider.nav.direction);
+	
+	slider.nav.direction.append(slider.nav.forward);
+	slider.nav.direction.append(slider.nav.backward);
+
+	slider.nav.backward.on('click', function() { backward(1); });
+	slider.nav.forward.on('click', function() { forward(1); });
+	
 	
 	if(slider.vars.effect != 'scroll') {
-		slider.find('.slide').each(function() {
-			alert('this didnt work!');
+		slider.markup.slide.each(function() {
 			$(this).css({'width' : slider.width() + 'px'});
 		});
 	}
@@ -44,18 +56,7 @@
 	
 
 		
-		// Add markup
-		slider.find('ul').addClass('slider-slides').wrap('<div class="slider-container" />');	//Wrap the slider in a container	
-		slider.find('li').addClass('slide');
-		
-		// Append the manual nav
-		slider.append(slider.nav.container)
-		
-		slider.nav.container.append(slider.nav.pagination);
-		slider.nav.container.append(slider.nav.direction);
-		
-		slider.nav.direction.append(slider.nav.forward);
-		slider.nav.direction.append(slider.nav.backward);
+
 		
 		
 		
