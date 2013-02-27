@@ -9,7 +9,7 @@
 	slider.vars = $.extend({}, $.xc1Slider.defaults, options);
 	slider.markup = {
 		container: $('<div class="slider-container" />'),
-		slides: slider.find('ul').addClass('slider-slides'),
+		slides: slider.find('ul').addClass('slider-slides slider-effect-' + slider.vars.effect),
 		slide: slider.find('li').addClass('slide')
 	}
 	slider.nav = {
@@ -17,7 +17,8 @@
 		pagination: $('<ul class="slider-nav-pagination"></ul>'), 
 		direction: $('<ul class="slider-nav-direction"></ul>'), 
 		forward: $('<li class="slider-nav-forward">&lt;</li>'),
-		backward: $('<li class="slider-nav-backward">&gt;</li>')
+		backward: $('<li class="slider-nav-backward">&gt;</li>'),
+		pages: ''
 	};
 	
 	var varInterval;
@@ -40,10 +41,13 @@
 	
 	
 	if(slider.vars.effect != 'scroll') {
-		slider.markup.slide.each(function() {
+		slider.markup.slide.each(function(item) {
 			$(this).css({'width' : slider.width() + 'px'});
+			slider.nav.pages = slider.nav.pages + '<li><a href="#'+item+'" ' + (item==0?'class="active"':'') + '> </a></li>';
 		});
 	}
+	
+	slider.nav.pagination.append(slider.nav.pages);
 	
 	// IE Fixx
 	var varIE = false;
@@ -54,9 +58,11 @@
 	// Load everything first time
 	function loadSlider() {
 	
-
+		for (i = 1; i <= listcount; i++) {
+			
+		}
 		
-
+		
 		
 		
 		
@@ -74,6 +80,10 @@
 		slider.vars.min = slider.markup.slides.width()*1;
 		slider.vars.max = slider.markup.slides.width()*2;
 		slider.vars.total = slider.markup.slides.width()*3;
+		
+		slider.vars.min = slider.markup.slides.width()*0;
+		slider.vars.max = slider.markup.slides.width()*1;
+		slider.vars.total = slider.markup.slides.width()*1;
 		
 /*
 		var slidePrepend = slides.children().slice().clone(true).addClass('slide-clone');
@@ -130,7 +140,11 @@
 			}
 			
 			if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
-				slider.vars.pos--;
+				if(slider.vars.effect == 'scroll') {
+					slider.vars.pos--;
+				} else {
+					slider.vars.pos = Math.floor(slider.vars.pos-slider.width());
+				}
 			} else {
 				slider.vars.pos = slider.vars.max;
 			}
