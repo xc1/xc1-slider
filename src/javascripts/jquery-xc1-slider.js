@@ -7,33 +7,79 @@
   	
   	/* Vars */
 	slider.vars = $.extend({}, $.xc1Slider.defaults, options);
+	slider.markup = {
+		container: $('<div class="slider-container" />'),
+		slides: true,
+		slide: true
+	}
+	slider.nav = {
+		container: $('<div class="slider-nav-container"></div>'), 
+		pagination: $('<ul class="slider-nav-pagination"></ul>'), 
+		direction: $('<ul class="slider-nav-direction"></ul>'), 
+		forward: $('<li class="slider-nav-forward"><a href="#" title="Previous">&lt;</a></li>'),
+		backward: $('<li class="slider-nav-backward"><a href="#" title="Next">&gt;</a></li>')
+	};
 	
-	var slides = slider.find('.slider-slides');
+	slider.markup.slides = slider.find('.slider-slides');
+	slider.markup.slide = slider.find('.slide');
 	
 	var varInterval;
+	var varIntervalSpeed;
 	
+	if(slider.vars.effect != 'scroll') {
+		slider.find('.slide').each(function() {
+			alert('this didnt work!');
+			$(this).css({'width' : slider.width() + 'px'});
+		});
+	}
 	
 	// IE Fixx
 	var varIE = false;
 	if($('html').hasClass('ie')) { varIE = true; }	
 	
+	loadSlider();
 	/* Functions */
-		
+	// Load everything first time
+	function loadSlider() {
 	
-		slider.vars.min = slides.width()*1;
-		slider.vars.max = slides.width()*2;
-		slider.vars.total = slides.width()*3;
+
+		
+		// Add markup
+		slider.find('ul').addClass('slider-slides').wrap('<div class="slider-container" />');	//Wrap the slider in a container	
+		slider.find('li').addClass('slide');
+		
+		// Append the manual nav
+		slider.append(slider.nav.container)
+		
+		slider.nav.container.append(slider.nav.pagination);
+		slider.nav.container.append(slider.nav.direction);
+		
+		slider.nav.direction.append(slider.nav.forward);
+		slider.nav.direction.append(slider.nav.backward);
 		
 		
-		var content = new Array();
-			
-		content.push(slides.children().slice().clone(true).addClass('slide-clone'));
-		content.push(slides.children().slice().clone(true).addClass('slide-clone'));
 		
-		for(var i = 0; i < content.length; i++) {
-			slides.append(content[i]);
-		}
 		
+		// Set the slider as loaded
+		slider.data('loaded', 'true');
+		
+	}
+	
+	// Restart when allready loaded
+	function restartSlider(slider, options) {
+		
+	}	
+	
+		slider.vars.min = slider.markup.slides.width()*1;
+		slider.vars.max = slider.markup.slides.width()*2;
+		slider.vars.total = slider.markup.slides.width()*3;
+		
+/*
+		var slidePrepend = slides.children().slice().clone(true).addClass('slide-clone');
+		
+		slides.appendBefore(slidePrepend);
+		slides.appendAfter(slides.children().slice().clone(true).addClass('slide-clone'));
+*/
 
 		forward(slider.vars.speed);
 
@@ -48,29 +94,38 @@
 	// Functions
 	function forward(speed) {
 		clearInterval(varInterval);
+		if(slider.vars.effect == 'scroll') {
+			varIntervalSpeed = slider.vars.speed/speed;
+		} else {
+			varIntervalSpeed = slider.vars.delay;
+		}
 		varInterval = setInterval(function() {
 			if(!varIE) {
-				slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
+				slider.markup.slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
 			} else {
-				slides.css({'left' : '-' + slider.vars.pos + 'px'});
+				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
 			}
 			
 			if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
-				slider.vars.pos++;
+				if(slider.vars.effect == 'scroll') {
+					slider.vars.pos++;
+				} else {
+					slider.vars.pos = Math.floor(slider.vars.pos+slider.width());
+				}
 			} else {
 				slider.vars.pos = slider.vars.min;
 			}
 			slider.vars.direction = 'forward';
-		}, slider.vars.speed/speed);
+		}, varIntervalSpeed);
 	}
 
 	function backward(speed) {
 		clearInterval(varInterval);
 		varInterval = setInterval(function() {
 			if(!varIE) {
-				slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
+				slider.markup.slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
 			} else {
-				slides.css({'left' : '-' + slider.vars.pos + 'px'});
+				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
 			}
 			
 			if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
@@ -282,24 +337,7 @@
 */
 	}
 
-	// Load everything first time
-	function loadSlider(slider, options) {
-		// Add markup
-		slider.find('ul').addClass('slider-slides').wrap('<div class="slider-container" />');	//Wrap the slider in a container	
-		slider.find('li').addClass('slide');
-		
-		slider.append('<div class="slider-nav-container"><ul class="slider-nav-pagination"></ul><ul class="slider-nav-direction"><li class="slider-nav-left"><a href="#" title="Previous">&lt;</a></li><li class="slider-nav-right"><a href="#" title="Next">&gt;</a></li></ul></div>'); // Append the manual nav
-		
-		// Set the slider as loaded
-		slider.data('loaded', 'true');
-		
-		new $.xc1Slider(slider, options);	
-	}
-	
-	// Restart when allready loaded
-	function restartSlider(slider, options) {
-		
-	}
+
   
   //xc1Slider: Defaults
   $.xc1Slider.defaults = {
@@ -345,10 +383,8 @@
   $.fn.xc1Slider = function(options) {
     return this.each(function() {
       if ($(this).find('ul > li').length != 1 && $(this).data('loaded') != true) {
-        loadSlider($(this), options);
-      } else if($(this).find('ul > li').length != 1) {
-	    restartSlider($(this), options); 
-      } else  {
+		new $.xc1Slider($(this), options);	
+      } else {
 	  	$(this).find('ul > li').fadeIn();
       }
     });

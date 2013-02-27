@@ -16,8 +16,8 @@ a, a:focus { color: #FFF; outline: none; }
 footer { height: 100px; }
 
 
-.slider-nav-direction li.slider-nav-left a { background: url('../images/xc1-slider-arrow-prev.png') no-repeat top center; left: -36px; }
-.slider-nav-direction li.slider-nav-right a { background: url('../images/xc1-slider-arrow-next.png') no-repeat top center; right: -36px; }
+.slider-nav-direction li.slider-nav-backward a { background: url('../images/xc1-slider-arrow-prev.png') no-repeat top center; left: -36px; }
+.slider-nav-direction li.slider-nav-forward a { background: url('../images/xc1-slider-arrow-next.png') no-repeat top center; right: -36px; }
 		
 	
 /* Lifted corners */
