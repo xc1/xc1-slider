@@ -8,6 +8,7 @@
   	/* Vars */
 	slider.vars = $.extend({}, $.xc1Slider.defaults, options);
 	slider.markup = {
+		slider: slider.addClass('slider'),
 		container: $('<div class="slider-container" />'),
 		slides: slider.find('ul').addClass('slider-slides slider-effect-' + slider.vars.effect),
 		slide: slider.find('li').addClass('slide')
@@ -43,7 +44,7 @@
 	if(slider.vars.effect != 'scroll') {
 		slider.markup.slide.each(function(item) {
 			$(this).css({'width' : slider.width() + 'px'});
-			slider.nav.pages = slider.nav.pages + '<li><a href="#'+item+'" ' + (item==0?'class="active"':'') + '> </a></li>';
+			slider.nav.pages = slider.nav.pages + '<li data-page="' + item + '" ' + (item==0?'class="active"':'') + '></li>';
 		});
 	}
 	
@@ -57,10 +58,6 @@
 	/* Functions */
 	// Load everything first time
 	function loadSlider() {
-	
-		for (i = 1; i <= listcount; i++) {
-			
-		}
 		
 		
 		
