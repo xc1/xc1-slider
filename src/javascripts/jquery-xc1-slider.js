@@ -1,48 +1,41 @@
+/*  */
+
 (function($){
 
   // xc1Slider
   $.xc1Slider = function(slider, options) {
-	alert('We got a winner!');
-	
+  	
+  	/* Vars */
 	slider.vars = $.extend({}, $.xc1Slider.defaults, options);
-	slider.load = {
-		varWidth: 0,
-		varHeight: 0,
-		varPos: 0,
-		varPosMin: 0,
-		varPosMax: 0,
-		varInterval: ''
-	};
 	
-	/* Vars */
+	var slides = slider.find('.slider-slides');
 	
-/*
-	var xc1SliderContainer = infiniteSlider.parent();
-	var infiniteSliderItems = infiniteSlider.children();
-	var infiniteSliderLoaded = infiniteSlider.data('loaded');
+	var varInterval;
 	
-*/
 	
 	// IE Fixx
-	var infiniteVarIE = false;
-	if($('html').hasClass('ie')) { sliderVarIE = true; }	
+	var varIE = false;
+	if($('html').hasClass('ie')) { varIE = true; }	
 	
 	/* Functions */
+		
 	
-	load();
-	
-	// Load everything first time
-	function load() {
-		//Wrap the slider in 
-		slider.find('ul').wrap('<div class="slider-container" />');		
-		// Append the manual nav
-		slider.append('<div class="slider-nav-container"><ul class="slider-nav-pagination"></ul><ul class="slider-nav-direction"><li class="slider-nav-left"><a href="#" title="Previous">&lt;</a></li><li class="slider-nav-right"><a href="#" title="Next">&gt;</a></li></ul></div>');
+		slider.vars.min = slides.width()*1;
+		slider.vars.max = slides.width()*2;
+		slider.vars.total = slides.width()*3;
+		
+		
+		var content = new Array();
+			
+		content.push(slides.children().slice().clone(true).addClass('slide-clone'));
+		content.push(slides.children().slice().clone(true).addClass('slide-clone'));
+		
+		for(var i = 0; i < content.length; i++) {
+			slides.append(content[i]);
+		}
 		
 
-		
-		// Set the slider as loaded
-		slider.data('loaded', 'true');
-	}
+		forward(slider.vars.speed);
 
 	// Navigations
 	function nav() {
@@ -54,51 +47,51 @@
 	
 	// Functions
 	function forward(speed) {
-		clearInterval(infiniteVarInterval);
-		infiniteVarInterval = setInterval(function() {
-			if(!infiniteVarIE) {
-				infiniteSlider.attr('style', 'width: ' + infiniteVarWidth*6 + 'px; -moz-transform: translate3d(-' + infiniteVarPos +'px, 0, 0); -webkit-transform:translate3d(-' + infiniteVarPos +'px,0,0); transform:translate3d(-' + infiniteVarPos +'px,0,0);');
+		clearInterval(varInterval);
+		varInterval = setInterval(function() {
+			if(!varIE) {
+				slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
 			} else {
-				infiniteSlider.css({'left' : '-' + infiniteVarPos + 'px'});
+				slides.css({'left' : '-' + slider.vars.pos + 'px'});
 			}
 			
-			if (infiniteVarPos >= infiniteVarPosMin && infiniteVarPos <= infiniteVarPosMax) {
-				infiniteVarPos++;
+			if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
+				slider.vars.pos++;
 			} else {
-				infiniteVarPos = infiniteVarPosMin;
+				slider.vars.pos = slider.vars.min;
 			}
-			infiniteVarDirection = 'forward';
-		}, infiniteSpeed/speed);
+			slider.vars.direction = 'forward';
+		}, slider.vars.speed/speed);
 	}
 
 	function backward(speed) {
-		clearInterval(infiniteVarInterval);
-		infiniteVarInterval = setInterval(function() {
-			if(!infiniteVarIE) {
-				infiniteSlider.attr('style', 'width: ' + infiniteVarWidth*6 + 'px; -moz-transform: translate3d(-' + infiniteVarPos +'px, 0, 0); -webkit-transform:translate3d(-' + infiniteVarPos +'px,0,0); transform:translate3d(-' + infiniteVarPos +'px,0,0);');
+		clearInterval(varInterval);
+		varInterval = setInterval(function() {
+			if(!varIE) {
+				slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
 			} else {
-				infiniteSlider.css({'left' : '-' + infiniteVarPos + 'px'});
+				slides.css({'left' : '-' + slider.vars.pos + 'px'});
 			}
 			
-			if (infiniteVarPos >= infiniteVarPosMin && infiniteVarPos <= infiniteVarPosMax) {
-				infiniteVarPos--;
+			if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
+				slider.vars.pos--;
 			} else {
-				infiniteVarPos = infiniteVarPosMax;
+				slider.vars.pos = slider.vars.max;
 			}
-			infiniteVarDirection = 'backward';
-		}, infiniteSpeed/speed);
+			slider.vars.direction = 'backward';
+		}, slider.vars.speed/speed);
 	}
 	
 	function pause() {
-		clearInterval(infiniteVarInterval);
+		clearInterval(varInterval);
 	}
 
 	function resume() {
-		if(infiniteAuto == true) {
-			if(infiniteVarDirection == 'forward') {
-				infiniteForward(1);		
+		if(slider.vars.auto == true) {
+			if(slider.vars.direction == 'forward') {
+				forward(1);		
 			} else {
-				infiniteBackward(1);
+				backward(1);
 			}
 		}
 	}
@@ -144,20 +137,20 @@
 		if(!infiniteSliderLoaded) {
 		
 			// Navigation
-			//var infiniteVarPause = $('<div class="infinite-scroll-pause"></div>');
-			var infiniteVarForward = $('<div class="infinite-scroll-forward"></div>');
-			var infiniteVarBackward = $('<div class="infinite-scroll-backward"></div>');
-			var infiniteVarPause = infiniteSliderItems;
+			//var varPause = $('<div class="infinite-scroll-pause"></div>');
+			var varForward = $('<div class="infinite-scroll-forward"></div>');
+			var varBackward = $('<div class="infinite-scroll-backward"></div>');
+			var varPause = infiniteSliderItems;
 			
 			// Append navigation
-			//infiniteSliderContainer.append(infiniteVarPause);
-			infiniteSliderContainer.append(infiniteVarForward);
-			infiniteSliderContainer.append(infiniteVarBackward);
+			//infiniteSliderContainer.append(varPause);
+			infiniteSliderContainer.append(varForward);
+			infiniteSliderContainer.append(varBackward);
 			
 			// Bind the Navigation
-			infiniteVarPause.on('mouseover', function() { infinitePause(); }).on('mouseout', function() { infiniteResume(); });
-			infiniteVarForward.on('mouseover', function() { infiniteForward(4); }).on('mouseout', function() { infiniteResume(); });
-			infiniteVarBackward.on('mouseover', function() { infiniteBackward(4); }).on('mouseout', function() { infiniteResume(); });
+			varPause.on('mouseover', function() { infinitePause(); }).on('mouseout', function() { infiniteResume(); });
+			varForward.on('mouseover', function() { infiniteForward(4); }).on('mouseout', function() { infiniteResume(); });
+			varBackward.on('mouseover', function() { infiniteBackward(4); }).on('mouseout', function() { infiniteResume(); });
 			
 			// Append extra content
 			var content = new Array();
@@ -176,13 +169,13 @@
 		
 		// Set sizes
 		infiniteSliderItems.each(function() {
-			infiniteVarWidth = Math.round(infiniteVarWidth + $(this).width());
+			varWidth = Math.round(varWidth + $(this).width());
 		});
-		infiniteSlider.css({'width' : infiniteVarWidth*6 + 'px'});
+		infiniteSlider.css({'width' : varWidth*6 + 'px'});
 		
 		// Set Positions
-		infiniteVarPosMax = infiniteVarWidth*4;
-		infiniteVarPosMin = infiniteVarWidth*2;
+		varPosMax = varWidth*4;
+		varPosMin = varWidth*2;
 		
 		// Start the slider on init
 		if(infiniteAuto == true && !infiniteSliderLoaded) {
@@ -198,33 +191,9 @@
 	*/
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		// Append the extra
-			//Wrap the slider in 
-			$('ul', this).wrap('<div class="slider-container" />');
-			// Append the manual next and prev links
-			$(this).append('<div class="slider-manual-nav-container"><ul class="slider-manual-nav"></ul></div>');
-			// Append the manual nav links
-			$(this).append('<div class="slider-manual-container"><ul class="slider-nav-ul"><li class="left-arrow"><a class="back" href="#" title="Previous">&lt;</a></li><li class="right-arrow"><a class="forward" href="#" title="Next">&gt;</a></li></ul></div>');
+/*
 		
-		// Set the variables
-		var $wrapper = $('#slider-container');
-            $slider = $wrapper.find('> ul'),
-            $items = $slider.find('> li'),
-            $single = $items.filter(':first'),
-		
-		
-		/*
-		 * Manual navigation
-		 */
+
 		$("ul.slider-manual-nav a").on('click', function () {
 			var navVal = $(this).attr("href");
 			
@@ -236,10 +205,7 @@
 			
 			return false;
 		});
-		
-		/*
-		 * Add all links to the manual navigation area
-		 */
+
 		var listcount = $slider.find('> li').size(),
 			appendlist = '';
 		
@@ -313,10 +279,35 @@
 	            gotoPage(page);
 	        });
 	    });  
+*/
+	}
+
+	// Load everything first time
+	function loadSlider(slider, options) {
+		// Add markup
+		slider.find('ul').addClass('slider-slides').wrap('<div class="slider-container" />');	//Wrap the slider in a container	
+		slider.find('li').addClass('slide');
+		
+		slider.append('<div class="slider-nav-container"><ul class="slider-nav-pagination"></ul><ul class="slider-nav-direction"><li class="slider-nav-left"><a href="#" title="Previous">&lt;</a></li><li class="slider-nav-right"><a href="#" title="Next">&gt;</a></li></ul></div>'); // Append the manual nav
+		
+		// Set the slider as loaded
+		slider.data('loaded', 'true');
+		
+		new $.xc1Slider(slider, options);	
+	}
+	
+	// Restart when allready loaded
+	function restartSlider(slider, options) {
+		
 	}
   
   //xc1Slider: Defaults
   $.xc1Slider.defaults = {
+	auto: true,						// Autoslide "true" or "false"
+	effect: 'slide', 				// Effect "slide", "scroll", "fade"
+	direction: 'forward',			//
+	speed: 500, 					// Milliseconds each slide is shown
+	delay: 3000, 					//	
     /*
 	animation: "fade",              //String: Select your animation type, "fade" or "slide"
     slideDirection: "horizontal",   //String: Select the sliding direction, "horizontal" or "vertical"
@@ -344,14 +335,20 @@
     after: function(){},            //Callback: function(slider) - Fires after each slider animation completes
     end: function(){}               //Callback: function(slider) - Fires when the slider reaches the last slide (asynchronous)
     */
+    total: 0,
+	pos: 0,
+	min: 0,
+	max: 0
   }
   
   //xc1Slider: Plugin
   $.fn.xc1Slider = function(options) {
     return this.each(function() {
-      if ($(this).find('ul > li').length != 1 || $(this).data('loaded') != true) {
-        new $.xc1Slider($(this), options);
-      } else {
+      if ($(this).find('ul > li').length != 1 && $(this).data('loaded') != true) {
+        loadSlider($(this), options);
+      } else if($(this).find('ul > li').length != 1) {
+	    restartSlider($(this), options); 
+      } else  {
 	  	$(this).find('ul > li').fadeIn();
       }
     });

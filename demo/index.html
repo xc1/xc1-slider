@@ -96,12 +96,11 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('.slider').xc1Slider({
-				slideAuto: true,
-				slideEffect: 'slide',
-				slideTime: 500, //
-				slideDelay: 3000, //
-				slideWidth: 'dynamic',
-				slideDirection: 'forward'
+				auto: true,
+				effect: 'slide', 		// slide, scroll, fade
+				direction: 'forward',
+				speed: 500, 			// Milliseconds each slide is shown
+				delay: 3000, 			//	
 				
 			});
 			prettyPrint();

@@ -2,11 +2,20 @@
 
 
 /* Basic */
-.slider { width: 100%; height: auto; position: relative; }
-.slider-container { margin: 0px auto; padding:0px; height: auto; width: 100%; overflow:hidden; position:relative;}
-.slider-container ul { width:9999px; position: relative; top:0; left:0; margin:0px; padding: 0px; }
-.slider-container ul li { margin: 0px; padding: 0px; float:left; list-style:none; height: 450px; width: 800px; }
+.slider { width: 100%; height: auto; display: block; position: relative; }
+.slider .slider-container { margin: 0px auto; padding:0px; height: auto; width: 100%; overflow:hidden; position:relative;}
+.slider .slider-container ul { width: 9999px; position: relative; top:0; left:0; margin:0px; padding: 0px; }
+.slider .slider-container ul li { margin: 0px; padding: 0px; float: left; list-style-type: none; display: block; position: relative; }
+.slider .slider-container ul li img { width: 100%; height: auto; display: block; position: relative;  }
 
+.slider .slider-container ul.slider-effect-slide {  }
+.slider .slider-container ul.slider-effect-slide li {  }
+
+.slider .slider-container ul.slider-effect-scroll {  }
+.slider .slider-container ul.slider-effect-scroll li img { height: 100%; width: auto; }
+
+.slider .slider-container ul.slider-effect-fade { width: 100%; }
+.slider .slider-container ul.slider-effect-fade li { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; }
 
 /* Dynamic */
 
@@ -17,10 +26,12 @@
 
 /* Nav */
 
-.slider-nav-direction { height: 0px; position: absolute; top: 0px; left: 0px; overflow: visible; width: 100%; margin: 0; padding: 0px; }
+.slider-nav-direction { height: 0px; position: absolute; top: 50%; left: 0px; overflow: visible; width: 100%; height: 0px; margin: 0; padding: 0px; }
 .slider-nav-direction li { list-style-type: none; }
+.slider-nav-direction li a { display: block; text-indent: -99999px; height: 75px; width:36px; top: 50%; margin: -38px 0px 0px 0px; position: absolute; overflow: hidden; }
+.slider-nav-direction li.slider-nav-left a { left: -36px; }
+.slider-nav-direction li.slider-nav-right a { right: -36px; }
 
-	
 .slider-nav-container { /* height:50px; position:relative; text-align: center; */ }
 .slider-nav-pagination { height:20px; padding: 0px; }
 .slider-nav-pagination li { list-style:none; display: inline; }

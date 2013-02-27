@@ -15,7 +15,7 @@ a, a:focus { color: #FFF; outline: none; }
 
 footer { height: 100px; }
 
-.slider-nav-direction li a { display: block; text-indent: -99999px; height: 75px; width:36px; top: 50%; margin: -38px 0px 0px 0px; position: absolute; overflow: hidden; }
+
 .slider-nav-direction li.slider-nav-left a { background: url('../images/xc1-slider-arrow-prev.png') no-repeat top center; left: -36px; }
 .slider-nav-direction li.slider-nav-right a { background: url('../images/xc1-slider-arrow-next.png') no-repeat top center; right: -36px; }
 		
