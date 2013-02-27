@@ -14,8 +14,8 @@
     
     <title>XC1 slider</title>
     
-	<link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen">
 	<link rel="stylesheet" href="../src/stylesheets/xc1-slider.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen">
 	
 	<link href="images/xc1-favicon.png" type="image/png" rel="shortcut icon">
 	<link href="images/xc1-iphone.png" rel="apple-touch-icon-precomposed">
@@ -34,10 +34,10 @@
 				<div class="slider">
 					<ul>
 						<li><img src="images/slide-1.png" /></li>
-						<li><img src="images/slide-2.png" /></li>
+						<li><a href="#"><img src="images/slide-2.png" /></a></li>
 						<li><img src="images/slide-3.png" /></li>
 						<li><img src="images/slide-4.png" /></li>
-						<li><img src="images/slide-5.png" /></li>
+						<li><div><img src="images/slide-5.png" /></div></li>
 						<li><img src="images/slide-6.png" /></li>
 					</ul>
 				</div>
@@ -100,7 +100,9 @@
 				slideEffect: 'slide',
 				slideTime: 500, //
 				slideDelay: 3000, //
-				slideWidth: 'dynamic'
+				slideWidth: 'dynamic',
+				slideDirection: 'forward'
+				
 			});
 			prettyPrint();
 		});

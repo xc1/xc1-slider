@@ -15,22 +15,9 @@ a, a:focus { color: #FFF; outline: none; }
 
 footer { height: 100px; }
 
-.slider-nav-ul { height: 0px; position: absolute; top: 0px; left: 0px; overflow: visible; width: 960px; margin: 0; padding: 0px; }
-.slider-nav-ul li { list-style-type: none; }
-.slider-nav-ul li a { display: block; text-indent: -99999px; height: 75px; width:36px; position: absolute; overflow: hidden; }
-.slider-nav-ul li.left-arrow a { background: url('../images/xc1-slider-arrow-prev.png') no-repeat top center; top: 170px; left: 44px; }
-.slider-nav-ul li.right-arrow a { background: url('../images/xc1-slider-arrow-next.png') no-repeat top center; top: 170px; right: 44px; }
-
-.slider { width: 960px; position: relative; }
-.slider-container { margin:0px 80px; padding:0px; height: 450px; width: 800px; overflow:hidden; position:relative;}
-.slider-container ul { width:9999px; position: absolute; top:0; left:0; margin:0px; padding: 0px; }
-.slider-container ul li { margin: 0px; padding: 0px; float:left; list-style:none; height: 450px; width: 800px; }
-	
-.slider-manual-nav-container { height:50px; position:relative; text-align: center; }
-.slider-manual-nav { height:20px; padding: 0px; }
-.slider-manual-nav li { list-style:none; display: inline; }
-.slider-manual-nav li a { background: rgba(81, 202, 255, 0.5); text-indent: -9999px; height:12px; width:12px; margin: 0px 4px; display: inline-block; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; -webkit-box-shadow:0 2px 3px rgba(0, 0, 0, 1); -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 1); box-shadow: 0 2px 3px rgba(0, 0, 0, 1); border-top: 1px solid rgba(255, 255, 255, 0.2); }
-.slider-manual-nav li a.active { background: rgba(142, 221, 255, 1); }
+.slider-nav-direction li a { display: block; text-indent: -99999px; height: 75px; width:36px; top: 50%; margin: -38px 0px 0px 0px; position: absolute; overflow: hidden; }
+.slider-nav-direction li.slider-nav-left a { background: url('../images/xc1-slider-arrow-prev.png') no-repeat top center; left: -36px; }
+.slider-nav-direction li.slider-nav-right a { background: url('../images/xc1-slider-arrow-next.png') no-repeat top center; right: -36px; }
 		
 	
 /* Lifted corners */
