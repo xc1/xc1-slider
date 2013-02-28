@@ -34,5 +34,5 @@
 .slider-nav-container { /* height:50px; position:relative; */ text-align: center; }
 
 .slider-nav-pagination { height:20px; padding: 0px; }
-.slider-nav-pagination li { list-style:none; display: inline-block; background: rgba(81, 202, 255, 0.5); text-indent: -9999px; height:12px; width:12px; margin: 0px 4px; display: inline-block; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; -webkit-box-shadow:0 2px 3px rgba(0, 0, 0, 1); -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 1); box-shadow: 0 2px 3px rgba(0, 0, 0, 1); border-top: 1px solid rgba(255, 255, 255, 0.2); }
+.slider-nav-pagination li { list-style:none; display: inline-block; background: rgba(81, 202, 255, 0.5); text-indent: -9999px; height:12px; width:12px; margin: 0px 4px; display: inline-block; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; -webkit-box-shadow:0 2px 3px rgba(0, 0, 0, 1); -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 1); box-shadow: 0 2px 3px rgba(0, 0, 0, 1); border-top: 1px solid rgba(255, 255, 255, 0.2); cursor: pointer; }
 .slider-nav-pagination li.active { background: rgba(142, 221, 255, 1); }

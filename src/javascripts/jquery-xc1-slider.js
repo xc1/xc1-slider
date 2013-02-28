@@ -11,7 +11,7 @@
 		slider: slider.addClass('slider'),
 		container: $('<div class="slider-container" />'),
 		slides: slider.find('ul').addClass('slider-slides slider-effect-' + slider.vars.effect),
-		slide: slider.find('li').addClass('slide')
+		slide: slider.find('li').addClass('slide').css({'width' : slider.width() + 'px'})
 	}
 	slider.nav = {
 		container: $('<div class="slider-nav-container"></div>'), 
@@ -37,18 +37,20 @@
 	slider.nav.direction.append(slider.nav.forward);
 	slider.nav.direction.append(slider.nav.backward);
 
-	slider.nav.backward.on('click', function() { backward(1); });
-	slider.nav.forward.on('click', function() { forward(1); });
-	
 	
 	if(slider.vars.effect != 'scroll') {
 		slider.markup.slide.each(function(item) {
-			$(this).css({'width' : slider.width() + 'px'});
 			slider.nav.pages = slider.nav.pages + '<li data-page="' + item + '" ' + (item==0?'class="active"':'') + '></li>';
 		});
 	}
-	
+
 	slider.nav.pagination.append(slider.nav.pages);
+
+	// Click events
+	slider.nav.backward.on('click', function() { backward(1); });
+	slider.nav.forward.on('click', function() { forward(1); });
+	slider.nav.pagination.find('li').on('click', function() { gotopage($(this).data('page')); });
+	
 	
 	// IE Fixx
 	var varIE = false;
@@ -151,6 +153,10 @@
 	
 	function pause() {
 		clearInterval(varInterval);
+	}
+	
+	function gotopage(page) {
+		alert(page);
 	}
 
 	function resume() {
