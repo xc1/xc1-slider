@@ -27,7 +27,7 @@
 		start: 'touchstart mousedown',
 		move: 'touchmove mousemove',
 		end: 'touchend mouseup'
-	}
+	};
 	
 	var varInterval;
 	var varIntervalSpeed;
@@ -64,6 +64,8 @@
 	slider.vars.min = slider.markup.slides.width()*1;
 	slider.vars.max = slider.markup.slides.width()*2;
 	slider.vars.total = slider.markup.slides.width()*3;
+	
+	slider.markup.slides.css({'width' : slider.vars.total + 'px'});
 
 	// Set the slider as loaded
 	slider.data('loaded', 'true');	
@@ -93,11 +95,7 @@
 			varIntervalSpeed = slider.vars.delay;
 		}
 		varInterval = setInterval(function() {
-			if(!varIE) {
-				slider.markup.slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
-			} else {
-				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
-			}
+			moveslide(slider.vars.pos);
 			
 			if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
 				if(slider.vars.effect == 'scroll') {
@@ -115,11 +113,7 @@
 	function backward(speed) {
 		clearInterval(varInterval);
 		varInterval = setInterval(function() {
-			if(!varIE) {
-				slider.markup.slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
-			} else {
-				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
-			}
+			moveslide(slider.vars.pos);
 			
 			if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
 				if(slider.vars.effect == 'scroll') {
@@ -140,11 +134,7 @@
 	
 	function gotoslide(slide) {
 		slider.vars.pos = Math.floor(slider.vars.min+(slide*slider.width()));
-		if(!varIE) {
-			slider.markup.slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
-		} else {
-			slider.markup.slides.animate({'left' : '-' + slider.vars.pos + 'px'}, 500);
-		}
+		moveslide(slider.vars.pos);
 	}
 
 	function resume() {
@@ -154,6 +144,15 @@
 			} else {
 				backward(1);
 			}
+		}
+	}
+	
+	function moveslide(pos) {
+		if(!varIE) {
+			//slider.markup.slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
+			slider.markup.slides.css({'transform' : 'translate3d(-' + pos + 'px, 0, 0)'});
+		} else {
+			slider.markup.slides.css({'left' : '-' + pos + 'px'});
 		}
 	}
 
