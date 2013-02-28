@@ -8,12 +8,12 @@
 	  	/* Vars */
 		slider.vars = $.extend({}, $.xc1Slider.defaults, options);
 		slider.markup = {
-			slider: slider.addClass('slider'),
-			container: $('<div class="slider-container" />'),
-			slides: slider.find('ul').addClass('slider-slides slider-effect-' + slider.vars.effect),
-			slide: slider.find('li').addClass('slide').css({'width' : slider.width() + 'px'}),
-			clonebefore: slider.find('.slide').clone().addClass('clone clone-before'),
-			cloneafter: slider.find('.slide').clone().addClass('clone clone-after')
+			slider: slider.addClass('slider'), // Main slider
+			container: $('<div class="slider-container" />'), // The container for the slides
+			slides: slider.find('ul').addClass('slider-slides slider-effect-' + slider.vars.effect), // Our slides
+			slide: slider.find('li').addClass('slide').css({'width' : slider.width() + 'px'}), // And our every little slide inside
+			clonebefore: slider.find('.slide').clone().addClass('clone clone-before'), // Clonewars 
+			cloneafter: slider.find('.slide').clone().addClass('clone clone-after') // More clones
 		}
 		slider.nav = {
 			container: $('<div class="slider-nav-container"></div>'), 
@@ -28,19 +28,23 @@
 			move: 'touchmove mousemove',
 			end: 'touchend mouseup'
 		};
-						
+
 		// Add markup
 		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
-		slider.markup.slides.prepend(slider.markup.clonebefore);
-		slider.markup.slides.append(slider.markup.cloneafter);
+		slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
+		slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones
 					
-		//slider.vars.slide = new Array();
-		//if(slider.vars.effect != 'scroll') {
-			slider.markup.slide.each(function(item) {
-				slider.vars.slide.push($(this).position());
-				slider.nav.slides = slider.nav.slides + '<li data-slide="' + item + '" class="' + ( item == 0 ? 'slider-nav-active ':'' ) + 'slider-nav-' + item + '"></li>';
-			});
-		//}
+		slider.markup.slide.each(function(item) {
+			slider.vars.min = Math.round(slider.vars.min+$(this).width());
+			slider.vars.slide.push($(this).position());
+			slider.nav.slides = slider.nav.slides + '<li data-slide="' + item + '" class="' + ( item == 0 ? 'slider-nav-active ':'' ) + 'slider-nav-' + item + '"></li>';
+		});
+
+		// Set Max, Min and Total values
+		slider.vars.min = slider.vars.min*1;
+		slider.vars.max = slider.vars.min*2;
+		slider.vars.total = slider.vars.min*3;
+						
 
 		// Append the manual nav
 		slider.append(slider.nav.container)
@@ -52,16 +56,9 @@
 		slider.nav.direction.append(slider.nav.backward);	
 		slider.nav.slidination.append(slider.nav.slides);
 		
-		// Set Max, Min and Total values
-		/*
-		for(var i = 0; i < slider.vars.slide.length; i++) {				
-			slider.vars.min = Math.round(slider.vars.min+slider.vars.slide[i].width());
-		}
-		*/
+
 		
-		slider.vars.min = slider.markup.slides.width()*1;
-		slider.vars.max = slider.markup.slides.width()*2;
-		slider.vars.total = slider.markup.slides.width()*3;
+
 		
 		slider.markup.slides.css({'width' : slider.vars.total + 'px'});
 	
