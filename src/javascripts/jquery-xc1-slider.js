@@ -11,15 +11,17 @@
 		slider: slider.addClass('slider'),
 		container: $('<div class="slider-container" />'),
 		slides: slider.find('ul').addClass('slider-slides slider-effect-' + slider.vars.effect),
-		slide: slider.find('li').addClass('slide').css({'width' : slider.width() + 'px'})
+		slide: slider.find('li').addClass('slide').css({'width' : slider.width() + 'px'}),
+		clonebefore: slider.find('.slide').clone().addClass('clone clone-before'),
+		cloneafter: slider.find('.slide').clone().addClass('clone clone-after')
 	}
 	slider.nav = {
 		container: $('<div class="slider-nav-container"></div>'), 
-		pagination: $('<ul class="slider-nav-pagination"></ul>'), 
+		slidination: $('<ul class="slider-nav-slidination"></ul>'), 
 		direction: $('<ul class="slider-nav-direction"></ul>'), 
 		forward: $('<li class="slider-nav-forward">&lt;</li>'),
 		backward: $('<li class="slider-nav-backward">&gt;</li>'),
-		pages: ''
+		slides: ''
 	};
 	
 	var varInterval;
@@ -27,11 +29,13 @@
 
 	// Add markup
 	slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
+	slider.markup.slides.prepend(slider.markup.clonebefore);
+	slider.markup.slides.append(slider.markup.cloneafter);
 	
 	// Append the manual nav
 	slider.append(slider.nav.container)
 	
-	slider.nav.container.append(slider.nav.pagination);
+	slider.nav.container.append(slider.nav.slidination);
 	slider.nav.container.append(slider.nav.direction);
 	
 	slider.nav.direction.append(slider.nav.forward);
@@ -40,16 +44,16 @@
 	
 	if(slider.vars.effect != 'scroll') {
 		slider.markup.slide.each(function(item) {
-			slider.nav.pages = slider.nav.pages + '<li data-page="' + item + '" ' + (item==0?'class="active"':'') + '></li>';
+			slider.nav.slides = slider.nav.slides + '<li data-slide="' + item + '" ' + (item==0?'class="active"':'') + '></li>';
 		});
 	}
 
-	slider.nav.pagination.append(slider.nav.pages);
+	slider.nav.slidination.append(slider.nav.slides);
 
 	// Click events
 	slider.nav.backward.on('click', function() { backward(1); });
 	slider.nav.forward.on('click', function() { forward(1); });
-	slider.nav.pagination.find('li').on('click', function() { gotopage($(this).data('page')); });
+	slider.nav.slidination.find('li').on('click', function() { gotoslide($(this).data('slide')); });
 	
 	
 	// IE Fixx
@@ -79,10 +83,7 @@
 		slider.vars.min = slider.markup.slides.width()*1;
 		slider.vars.max = slider.markup.slides.width()*2;
 		slider.vars.total = slider.markup.slides.width()*3;
-		
-		slider.vars.min = slider.markup.slides.width()*0;
-		slider.vars.max = slider.markup.slides.width()*1;
-		slider.vars.total = slider.markup.slides.width()*1;
+
 		
 /*
 		var slidePrepend = slides.children().slice().clone(true).addClass('slide-clone');
@@ -155,8 +156,8 @@
 		clearInterval(varInterval);
 	}
 	
-	function gotopage(page) {
-		alert(page);
+	function gotoslide(slide) {
+		alert(slide);
 	}
 
 	function resume() {
