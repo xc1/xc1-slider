@@ -4,7 +4,7 @@
 /* Basic */
 .slider { width: 100%; height: auto; display: block; position: relative; }
 .slider .slider-container { margin: 0px auto; padding:0px; height: auto; width: 100%; overflow:hidden; position:relative;}
-.slider .slider-container ul { width: 9999px; position: relative; top:0; left:0; margin:0px; padding: 0px; }
+.slider .slider-container ul { width: 9999px; position: relative; top:0; left:0; margin:0px; padding: 0px; -webkit-transition: all 0.5s ease; -moz-transition: all 0.5s ease; transition: all 0.5s ease; }
 .slider .slider-container ul li { margin: 0px; padding: 0px; float: left; list-style-type: none; display: block; position: relative; }
 .slider .slider-container ul li img { width: 100%; height: auto; display: block; position: relative;  }
 

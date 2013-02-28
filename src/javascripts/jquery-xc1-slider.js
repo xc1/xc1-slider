@@ -23,6 +23,11 @@
 		backward: $('<li class="slider-nav-backward">&gt;</li>'),
 		slides: ''
 	};
+	slider.touch = {
+		start: 'touchstart mousedown',
+		move: 'touchmove mousemove',
+		end: 'touchend mouseup'
+	}
 	
 	var varInterval;
 	var varIntervalSpeed;
@@ -54,50 +59,27 @@
 	slider.nav.backward.on('click', function() { backward(1); });
 	slider.nav.forward.on('click', function() { forward(1); });
 	slider.nav.slidination.find('li').on('click', function() { gotoslide($(this).data('slide')); });
-	
-	
+
+	// Set Max, Min and Total values
+	slider.vars.min = slider.markup.slides.width()*1;
+	slider.vars.max = slider.markup.slides.width()*2;
+	slider.vars.total = slider.markup.slides.width()*3;
+
+	// Set the slider as loaded
+	slider.data('loaded', 'true');	
+
+	// Bind touch	
+	slider.bind(slider.touch.start, function(evt) { evt.preventDefault(); console.log('touchstart' + evt.pageX); });
+	slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
+	slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); console.log('touchend ' + evt.pageX); });
+
+	forward(slider.vars.speed);
+
 	// IE Fixx
 	var varIE = false;
 	if($('html').hasClass('ie')) { varIE = true; }	
 	
-	loadSlider();
 	/* Functions */
-	// Load everything first time
-	function loadSlider() {
-		
-		
-		
-		
-		
-		
-		// Set the slider as loaded
-		slider.data('loaded', 'true');
-		
-	}
-	
-	// Restart when allready loaded
-	function restartSlider(slider, options) {
-		
-	}	
-	
-		slider.vars.min = slider.markup.slides.width()*1;
-		slider.vars.max = slider.markup.slides.width()*2;
-		slider.vars.total = slider.markup.slides.width()*3;
-
-		
-/*
-		var slidePrepend = slides.children().slice().clone(true).addClass('slide-clone');
-		
-		slides.appendBefore(slidePrepend);
-		slides.appendAfter(slides.children().slice().clone(true).addClass('slide-clone'));
-*/
-
-		forward(slider.vars.speed);
-
-	// Navigations
-	function nav() {
-		
-	}
 
 
 
@@ -157,7 +139,12 @@
 	}
 	
 	function gotoslide(slide) {
-		alert(slide);
+		slider.vars.pos = Math.floor(slider.vars.min+(slide*slider.width()));
+		if(!varIE) {
+			slider.markup.slides.attr('style', 'width: ' + slider.vars.total + 'px; -moz-transform: translate3d(-' + slider.vars.pos +'px, 0, 0); -webkit-transform:translate3d(-' + slider.vars.pos +'px,0,0); transform:translate3d(-' + slider.vars.pos +'px,0,0);');
+		} else {
+			slider.markup.slides.animate({'left' : '-' + slider.vars.pos + 'px'}, 500);
+		}
 	}
 
 	function resume() {
@@ -170,19 +157,6 @@
 		}
 	}
 
-
-
-
-/*
-
-	function xc1Slider() {
-		var xc1Sliders = new Array();
-		
-		$('.infinite-slides').each(function(index, item) {
-			xc1SliderImages($(this));
-		});
-	}
-	
 	function xc1SliderImages(infiniteSlider) {
 		var sectionHeight = infiniteSlider.height();	
 	
@@ -201,6 +175,19 @@
 			}
 		});
 	}
+
+
+/*
+
+	function xc1Slider() {
+		var xc1Sliders = new Array();
+		
+		$('.infinite-slides').each(function(index, item) {
+			xc1SliderImages($(this));
+		});
+	}
+	
+	
 	
 	
 	function xc1SliderInit(infiniteSlider, infiniteAuto, infiniteSpeed) {
@@ -364,7 +351,8 @@
 	effect: 'slide', 				// Effect "slide", "scroll", "fade"
 	direction: 'forward',			//
 	speed: 500, 					// Milliseconds each slide is shown
-	delay: 3000, 					//	
+	delay: 3000, 					//
+	current: 1,						// The current slide, to start on another slide
     /*
 	animation: "fade",              //String: Select your animation type, "fade" or "slide"
     slideDirection: "horizontal",   //String: Select the sliding direction, "horizontal" or "vertical"
