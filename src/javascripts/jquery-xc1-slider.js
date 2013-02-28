@@ -62,9 +62,12 @@
 		
 		slider.markup.slides.css({'width' : slider.vars.total + 'px'});
 	
-		// Click events
+		// Interactions
 		slider.nav.backward.on('click', function() { backward(1); });
 		slider.nav.forward.on('click', function() { forward(1); });
+		
+		slider.markup.slides.on('mouseover', function() { pause(); }).on('mouseout', function() { resume(); });
+		
 		slider.nav.slidination.find('li').on('click', function() { 
 			slider.nav.slidination.find('li').removeClass('slider-nav-active'); 
 			$(this).addClass('slider-nav-active'); 
@@ -79,7 +82,7 @@
 		slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
 		slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); console.log('touchend ' + evt.pageX); });
 
-		forward(1);	
+		autoslide(1);	
 		if(slider.vars.effect == 'scroll') {
 			slider.vars.intervalspeed = slider.vars.speed;
 		} else {
@@ -91,32 +94,29 @@
 		var varIE = false;
 		if($('html').hasClass('ie')) { varIE = true; }	
 		
-		/* Functions */	
-		function forward(speed) {
+		/* Functions */
+		function autoslide(speed) {
 			clearInterval(slider.vars.interval);
-			
 			slider.vars.interval = setInterval(function() {
+
 				if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
-					if(slider.vars.effect == 'scroll') { slider.vars.pos++; } else { slider.vars.pos = Math.floor(slider.vars.pos+slider.width()); }
+					if(slider.vars.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
 				} else {
-					slider.vars.pos = slider.vars.min;
+					if(slider.vars.direction == 'forward') { slider.vars.pos = slider.vars.min; } else { slider.vars.pos = slider.vars.max;	}
 				}
-				slider.vars.direction = 'forward';
-				moveslide(slider.vars.pos);
+				if(slider.vars.effect == 'scroll') { moveslide(slider.vars.pos); } else { if(slider.vars.direction == 'forward') { gotoslide(slider.vars.current++); } else { gotoslide(slider.vars.current--); } }
+		
 			}, slider.vars.intervalspeed/speed);
+		}
+		
+		function forward(speed) {
+			gotoslide(slider.vars.current++);
+			slider.vars.direction = 'forward';
 		}
 	
 		function backward(speed) {
-			clearInterval(slider.vars.interval);
-			slider.vars.interval = setInterval(function() {				
-				if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
-					if(slider.vars.effect == 'scroll') { slider.vars.pos--; } else { slider.vars.pos = Math.floor(slider.vars.pos-slider.width()); }
-				} else {
-					slider.vars.pos = slider.vars.max;
-				}
-				slider.vars.direction = 'backward';
-				moveslide(slider.vars.pos);
-			}, slider.vars.intervalspeed/speed);
+			gotoslide(slider.vars.current--); 
+			slider.vars.direction = 'backward';
 		}
 		
 		function pause() {
@@ -131,11 +131,7 @@
 	
 		function resume() {
 			if(slider.vars.auto == true) {
-				if(slider.vars.direction == 'forward') {
-					forward(1);		
-				} else {
-					backward(1);
-				}
+				autoslide(1);		
 			}
 		}
 		
@@ -190,33 +186,6 @@
 		speed: 500, 					// Milliseconds each slide is shown
 		delay: 3000, 					//
 		current: 1,						// The current slide, to start on another slide
-		/*
-		animation: "fade",              //String: Select your animation type, "fade" or "slide"
-		slideDirection: "horizontal",   //String: Select the sliding direction, "horizontal" or "vertical"
-		slideshow: true,                //Boolean: Animate slider automatically
-		slideshowSpeed: 7000,           //Integer: Set the speed of the slideshow cycling, in milliseconds
-		animationDuration: 600,         //Integer: Set the speed of animations, in milliseconds
-		directionNav: true,             //Boolean: Create navigation for previous/next navigation? (true/false)
-		controlNav: true,               //Boolean: Create navigation for paging control of each clide? Note: Leave true for manualControls usage
-		keyboardNav: true,              //Boolean: Allow slider navigating via keyboard left/right keys
-		mousewheel: false,              //Boolean: Allow slider navigating via mousewheel
-		prevText: "Previous",           //String: Set the text for the "previous" directionNav item
-		nextText: "Next",               //String: Set the text for the "next" directionNav item
-		pausePlay: false,               //Boolean: Create pause/play dynamic element
-		pauseText: 'Pause',             //String: Set the text for the "pause" pausePlay item
-		playText: 'Play',               //String: Set the text for the "play" pausePlay item
-		randomize: false,               //Boolean: Randomize slide order
-		slideToStart: 0,                //Integer: The slide that the slider should start on. Array notation (0 = first slide)
-		animationLoop: true,            //Boolean: Should the animation loop? If false, directionNav will received "disable" classes at either end
-		pauseOnAction: true,            //Boolean: Pause the slideshow when interacting with control elements, highly recommended.
-		pauseOnHover: false,            //Boolean: Pause the slideshow when hovering over slider, then resume when no longer hovering
-		controlsContainer: "",          //Selector: Declare which container the navigation elements should be appended too. Default container is the flexSlider element. Example use would be ".flexslider-container", "#container", etc. If the given element is not found, the default action will be taken.
-		manualControls: "",             //Selector: Declare custom control navigation. Example would be ".flex-control-nav li" or "#tabs-nav li img", etc. The number of elements in your controlNav should match the number of slides/tabs.
-		start: function(){},            //Callback: function(slider) - Fires when the slider loads the first slide
-		before: function(){},           //Callback: function(slider) - Fires asynchronously with each slider animation
-		after: function(){},            //Callback: function(slider) - Fires after each slider animation completes
-		end: function(){}               //Callback: function(slider) - Fires when the slider reaches the last slide (asynchronous)
-		*/
 		total: 0,
 		pos: 0,
 		min: 0,
