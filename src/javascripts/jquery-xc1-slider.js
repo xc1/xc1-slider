@@ -31,21 +31,12 @@
 		
 		var varInterval;
 		var varIntervalSpeed;
-	
+				
 		// Add markup
 		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
 		slider.markup.slides.prepend(slider.markup.clonebefore);
 		slider.markup.slides.append(slider.markup.cloneafter);
-		
-		// Append the manual nav
-		slider.append(slider.nav.container)
-		
-		slider.nav.container.append(slider.nav.slidination);
-		slider.nav.container.append(slider.nav.direction);
-		
-		slider.nav.direction.append(slider.nav.forward);
-		slider.nav.direction.append(slider.nav.backward);
-	
+					
 		//slider.vars.slide = new Array();
 		if(slider.vars.effect != 'scroll') {
 			slider.markup.slide.each(function(item) {
@@ -53,8 +44,23 @@
 				slider.nav.slides = slider.nav.slides + '<li data-slide="' + item + '" ' + (item==0?'class="slider-nav-active"':'') + '></li>';
 			});
 		}
-	
+
+		// Append the manual nav
+		slider.append(slider.nav.container)
+		
+		slider.nav.container.append(slider.nav.slidination);
+		slider.nav.container.append(slider.nav.direction);
+		
+		slider.nav.direction.append(slider.nav.forward);
+		slider.nav.direction.append(slider.nav.backward);	
 		slider.nav.slidination.append(slider.nav.slides);
+		
+		// Set Max, Min and Total values
+		slider.vars.min = slider.markup.slides.width()*1;
+		slider.vars.max = slider.markup.slides.width()*2;
+		slider.vars.total = slider.markup.slides.width()*3;
+		
+		slider.markup.slides.css({'width' : slider.vars.total + 'px'});
 	
 		// Click events
 		slider.nav.backward.on('click', function() { backward(1); });
@@ -64,14 +70,7 @@
 			$(this).addClass('slider-nav-active'); 
 			gotoslide($(this).data('slide'));
 		});
-	
-		// Set Max, Min and Total values
-		slider.vars.min = slider.markup.slides.width()*1;
-		slider.vars.max = slider.markup.slides.width()*2;
-		slider.vars.total = slider.markup.slides.width()*3;
-		
-		slider.markup.slides.css({'width' : slider.vars.total + 'px'});
-	
+			
 		// Set the slider as loaded
 		slider.data('loaded', 'true');	
 	
@@ -80,18 +79,13 @@
 		slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
 		slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); console.log('touchend ' + evt.pageX); });
 	
-		forward(slider.vars.speed);
+		//forward(slider.vars.speed);
 	
 		// IE Fixx
 		var varIE = false;
 		if($('html').hasClass('ie')) { varIE = true; }	
 		
-		/* Functions */
-	
-	
-	
-		
-		// Functions
+		/* Functions */	
 		function forward(speed) {
 			clearInterval(varInterval);
 			if(slider.vars.effect == 'scroll') {
