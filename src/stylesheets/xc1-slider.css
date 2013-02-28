@@ -4,7 +4,7 @@
 /* Basic */
 .slider { width: 100%; height: auto; display: block; position: relative; }
 .slider .slider-container { margin: 0px auto; padding:0px; height: auto; width: 100%; overflow:hidden; position:relative;}
-.slider .slider-container ul { width: 9999px; position: relative; top:0; left:0; margin:0px; padding: 0px; -webkit-transition: all 0.5s ease; -moz-transition: all 0.5s ease; transition: all 0.5s ease; }
+.slider .slider-container ul { width: 9999px; overflow: visible; position: relative; top:0; left:0; margin:0px; padding: 0px; -webkit-transition: all 0.5s ease; -moz-transition: all 0.5s ease; transition: all 0.5s ease; }
 .slider .slider-container ul li { margin: 0px; padding: 0px; float: left; list-style-type: none; display: block; position: relative; }
 .slider .slider-container ul li img { width: 100%; height: auto; display: block; position: relative;  }
 
@@ -35,4 +35,4 @@
 
 .slider-nav-slidination { height:20px; padding: 0px; }
 .slider-nav-slidination li { list-style:none; display: inline-block; background: rgba(81, 202, 255, 0.5); text-indent: -9999px; height:12px; width:12px; margin: 0px 4px; display: inline-block; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; -webkit-box-shadow:0 2px 3px rgba(0, 0, 0, 1); -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 1); box-shadow: 0 2px 3px rgba(0, 0, 0, 1); border-top: 1px solid rgba(255, 255, 255, 0.2); cursor: pointer; }
-.slider-nav-slidination li.active { background: rgba(142, 221, 255, 1); }
+.slider-nav-slidination li.slider-nav-active { background: rgba(142, 221, 255, 1); }
