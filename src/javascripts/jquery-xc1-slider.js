@@ -12,8 +12,8 @@
 			container: $('<div class="slider-container" />'), // The container for the slides
 			slides: slider.find('ul').addClass('slider-slides slider-effect-' + slider.vars.effect), // Our slides
 			slide: slider.find('li').addClass('slide'), // And our every little slide inside
-			clonebefore: slider.find('.slide').clone().addClass('clone clone-before'), // Clonewars 
-			cloneafter: slider.find('.slide').clone().addClass('clone clone-after') // More clones
+			clonebefore: '', // Clonewars 
+			cloneafter: '' // More clones
 		}
 		slider.nav = {
 			container: $('<div class="slider-nav-container"></div>'), 
@@ -28,18 +28,18 @@
 			move: 'touchmove mousemove',
 			end: 'touchend mouseup'
 		};
+		slider.scroll = {
+			sliderheight: ''
+		};
 
-		// Add markup
-		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
-		slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
-		slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones
-
-		
 		// Scroll effect specials
 		if(slider.vars.effect == 'scroll') { 
-			slider.scroll = {
-				sliderheight: ''
-			}
+			
+			// Set scroll vars
+			slider.markup.clonebefore = slider.find('.slide').clone().addClass('clone clone-before');
+			slider.markup.cloneafter = slider.find('.slide').clone().addClass('clone clone-after');
+			
+
 			// Set the same height on all the images
 			slider.find('img').each(function(index, item) {
 				if(index == 0) { slider.scroll.sliderheight = $(this).height(); } else if($(this).height() < slider.scroll.sliderheight ) { slider.scroll = $(this).height(); }
@@ -58,6 +58,10 @@
 		
 		// Slide effect specials
 		if(slider.vars.effect == 'slide') {
+
+			slider.markup.clonebefore = slider.find('.slide').clone().addClass('clone clone-before');
+			slider.markup.cloneafter = slider.find('.slide').clone().addClass('clone clone-after');
+
 			slider.find('.slide').css({'width' : slider.width() + 'px'});
 		}
 		
@@ -65,6 +69,11 @@
 		if(slider.vars.effect == 'fade') {
 			slider.find('.slide').css({'width' : slider.width() + 'px'});
 		}
+
+		// Add markup
+		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
+		slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
+		slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones
 					
 		slider.markup.slide.each(function(index) {
 			slider.vars.min = Math.round(slider.vars.min+$(this).width());
@@ -112,7 +121,7 @@
 		slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
 		slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); console.log('touchend ' + evt.pageX); });
 
-		autoslide();	
+		//autoslide();	
 		if(slider.vars.effect == 'scroll') {
 			slider.vars.intervalspeed = slider.vars.speed;
 		} else {
@@ -193,8 +202,15 @@
 		}
 
 		function fadeslide(slide) {
-			slider.markup.slides.find('.slide').fadeOut();
-			slider.markup.slides.find('.slide-' + slide).fadeIn();
+			if(!varIE) {
+				slider.markup.slides.find('.slide-' + slide).css({'z-index' : '15', 'opacity' : '1', 'transition' : 'all ' + slider.vars.speed/1000 + 's ease'});
+			} else {
+				slider.markup.slides.find('.slide-' + slide).css({'z-index' : '15'}).animate({'opacity' : ''}, slider.vars.speed);
+			}
+			setTimeout(function() { 
+				slider.markup.slides.find('.slide').css({'z-index' : '5'});
+				slider.markup.slides.find('.slide-' + slide).css({'z-index' : '10'});
+			}, slider.vars.speed);
 		}
 
 	}
