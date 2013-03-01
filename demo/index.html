@@ -48,7 +48,9 @@
 				<!-- Basic slider info -->
 				<div id="slider-info">
 					<h2>Features</h2>
+<!--
 					<p>Why build yet another slider with so many super <a href="http://nivo.dev7studios.com/">awesome sliders</a> allready out there. 
+-->
 					<h2>Usage</h2>
 					<h3>Slider markup</h3>
 					<p>The XC1 slider is built to use a minimum need of markup. A list of content within a div is pretty much all you need. Just place an id trigger on your div and throw it in to the jQuery powered javascript machinery. Good luck!
@@ -94,10 +96,10 @@
 	
 	<!-- Trigger plugin -->
 	<script type="text/javascript">
-		$(document).ready(function() {
+		$(window).load(function() {
 			$('.slider').xc1Slider({
 				auto: true,
-				effect: 'scroll', 		// Effect, slide, scroll or fade
+				effect: 'fade', 		// Effect, slide, scroll or fade
 				direction: 'forward',	// Direction, forward or backward
 				speed: 20, 				// Milliseconds each slide is shown
 				delay: 3000 			//	
