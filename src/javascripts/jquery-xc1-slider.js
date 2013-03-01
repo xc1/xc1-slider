@@ -37,22 +37,23 @@
 		
 		// Scroll effect specials
 		if(slider.vars.effect == 'scroll') { 
-			
-			
-			/*
-slider.find('img').each(function(index, item) {
-				var newImage = new Image();
-				newImage.src = $(this).attr('src');
-				var newWidth = Math.floor( newImage.width * (slider.height() / newImage.height) );
-				var newHeight = slider.height();
-				
-				$(this).attr('width', newWidth).attr('height', newHeight).parent().css({'width' : newWidth + 'px', 'height' : newHeight + 'px'});
-							
-				if(index == slider-markup.slide.length-1) {	
-					//xc1SliderInit(infiniteSlider, infiniteAuto, infiniteSpeed);
+			slider.scroll = {
+				sliderheight: ''
+			}
+			// Set the same height on all the images
+			slider.find('img').each(function(index, item) {
+				if(index == 0) { slider.scroll.sliderheight = $(this).height(); } else if($(this).height() < slider.scroll.sliderheight ) { slider.scroll = $(this).height(); }
+				if(index == slider.markup.slide.length-1) {
+					slider.find('img').each(function(index, item) {						
+						var image = new Image();
+						image.src = $(this).attr('src');
+						var imagewidth = Math.floor( image.width * (slider.scroll.sliderheight / image.height) );
+						var imageheight = slider.scroll.sliderheight;
+						$(this).attr('width', imagewidth).attr('height', imageheight).parent().css({'width' : imagewidth + 'px', 'height' : imageheight + 'px'});
+					});
 				}
 			});
-*/
+			
 		}
 		
 		// Slide effect specials
@@ -181,11 +182,7 @@ slider.find('img').each(function(index, item) {
 				slider.markup.slides.animate({'left' : '-' + pos + 'px'}, slider.vars.speed);
 			}
 		}
-	
-		function xc1SliderImages(infiniteSlider) {
-		
-			
-		}
+
 	}
 
 
