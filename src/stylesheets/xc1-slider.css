@@ -2,7 +2,7 @@
 
 
 /* Basic */
-.slider { width: 100%; height: auto; display: block; position: relative; }
+.slider { width: 100%; height: auto; display: block; position: relative; margin: 0px auto 50px auto; }
 .slider .slider-container { margin: 0px auto; padding:0px; height: auto; width: 100%; overflow:hidden; position:relative;}
 .slider .slider-container ul { width: 9999px; overflow: visible; position: relative; top:0; left:0; margin:0px; padding: 0px; /* -webkit-transition: all 0.5s ease; -moz-transition: all 0.5s ease; transition: all 0.5s ease; */ }
 .slider .slider-container ul li { margin: 0px; padding: 0px; float: left; list-style-type: none; display: block; position: relative; }
@@ -15,7 +15,7 @@
 .slider .slider-container ul.slider-effect-scroll li { width: auto !important; }
 .slider .slider-container ul.slider-effect-scroll li img { height: 100%; width: auto; }
 
-.slider .slider-container ul.slider-effect-fade { width: 100%; }
+.slider .slider-container ul.slider-effect-fade { width: 100%; left: 0px !important; transform: translate3d(0px, 0px, 0px) !important; }
 .slider .slider-container ul.slider-effect-fade li { position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; }
 
 /* Dynamic */
@@ -32,8 +32,8 @@
 .slider-nav-direction li.slider-nav-backward { left: -36px; }
 .slider-nav-direction li.slider-nav-forward { right: -36px; }
 
-.slider-nav-container { /* height:50px; position:relative; */ text-align: center; }
+.slider-nav-container { text-align: center; }
 
-.slider-nav-slidination { height:20px; padding: 0px; }
+.slider-nav-slidination { position: absolute; bottom: -50px; height:20px; padding: 0px; width: 100%; }
 .slider-nav-slidination li { list-style:none; display: inline-block; background: rgba(81, 202, 255, 0.5); text-indent: -9999px; height:12px; width:12px; margin: 0px 4px; display: inline-block; -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; -webkit-box-shadow:0 2px 3px rgba(0, 0, 0, 1); -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 1); box-shadow: 0 2px 3px rgba(0, 0, 0, 1); border-top: 1px solid rgba(255, 255, 255, 0.2); cursor: pointer; }
 .slider-nav-slidination li.slider-nav-active { background: rgba(142, 221, 255, 1); }

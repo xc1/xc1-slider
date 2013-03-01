@@ -11,7 +11,7 @@
 			slider: slider.addClass('slider'), // Main slider
 			container: $('<div class="slider-container" />'), // The container for the slides
 			slides: slider.find('ul').addClass('slider-slides slider-effect-' + slider.vars.effect), // Our slides
-			slide: slider.find('li').addClass('slide').css({'width' : slider.width() + 'px'}), // And our every little slide inside
+			slide: slider.find('li').addClass('slide'), // And our every little slide inside
 			clonebefore: slider.find('.slide').clone().addClass('clone clone-before'), // Clonewars 
 			cloneafter: slider.find('.slide').clone().addClass('clone clone-after') // More clones
 		}
@@ -33,6 +33,37 @@
 		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
 		slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
 		slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones
+
+		
+		// Scroll effect specials
+		if(slider.vars.effect == 'scroll') { 
+			
+			
+			/*
+slider.find('img').each(function(index, item) {
+				var newImage = new Image();
+				newImage.src = $(this).attr('src');
+				var newWidth = Math.floor( newImage.width * (slider.height() / newImage.height) );
+				var newHeight = slider.height();
+				
+				$(this).attr('width', newWidth).attr('height', newHeight).parent().css({'width' : newWidth + 'px', 'height' : newHeight + 'px'});
+							
+				if(index == slider-markup.slide.length-1) {	
+					//xc1SliderInit(infiniteSlider, infiniteAuto, infiniteSpeed);
+				}
+			});
+*/
+		}
+		
+		// Slide effect specials
+		if(slider.vars.effect == 'slide') {
+			slider.find('.slide').css({'width' : slider.width() + 'px'});
+		}
+		
+		// Fade effect specials
+		if(slider.vars.effect == 'fade') {
+			slider.find('.slide').css({'width' : slider.width() + 'px'});
+		}
 					
 		slider.markup.slide.each(function(item) {
 			slider.vars.min = Math.round(slider.vars.min+$(this).width());
@@ -47,7 +78,7 @@
 						
 
 		// Append the manual nav
-		slider.append(slider.nav.container)
+		slider.append(slider.nav.container);
 		
 		slider.nav.container.append(slider.nav.slidination);
 		slider.nav.container.append(slider.nav.direction);
@@ -55,16 +86,13 @@
 		slider.nav.direction.append(slider.nav.forward);
 		slider.nav.direction.append(slider.nav.backward);	
 		slider.nav.slidination.append(slider.nav.slides);
-		
-
-		
 
 		
 		slider.markup.slides.css({'width' : slider.vars.total + 'px'});
 	
 		// Interactions
-		slider.nav.backward.on('click', function() { backward(1); });
-		slider.nav.forward.on('click', function() { forward(1); });
+		slider.nav.backward.on('click', function() { backward(); });
+		slider.nav.forward.on('click', function() { forward(); });
 		
 		slider.markup.slides.on('mouseover', function() { pause(); }).on('mouseout', function() { resume(); });
 		
@@ -82,7 +110,7 @@
 		slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
 		slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); console.log('touchend ' + evt.pageX); });
 
-		autoslide(1);	
+		autoslide();	
 		if(slider.vars.effect == 'scroll') {
 			slider.vars.intervalspeed = slider.vars.speed;
 		} else {
@@ -95,7 +123,7 @@
 		if($('html').hasClass('ie')) { varIE = true; }	
 		
 		/* Functions */
-		function autoslide(speed) {
+		function autoslide() {
 			clearInterval(slider.vars.interval);
 			slider.vars.interval = setInterval(function() {
 
@@ -106,15 +134,15 @@
 				}
 				if(slider.vars.effect == 'scroll') { moveslide(slider.vars.pos); } else { if(slider.vars.direction == 'forward') { gotoslide(slider.vars.current++); } else { gotoslide(slider.vars.current--); } }
 		
-			}, slider.vars.intervalspeed/speed);
+			}, slider.vars.intervalspeed);
 		}
 		
-		function forward(speed) {
+		function forward() {
 			gotoslide(slider.vars.current++);
 			slider.vars.direction = 'forward';
 		}
 	
-		function backward(speed) {
+		function backward() {
 			gotoslide(slider.vars.current--); 
 			slider.vars.direction = 'backward';
 		}
@@ -140,9 +168,7 @@
 				if(pos > slider.vars.slide[i].left) {
 					slider.vars.current = i;
 				}
-			}
-			//console.log(slider.vars.current);
-						
+			}						
 			slider.nav.slidination.find('li').removeClass('slider-nav-active');
 			slider.nav.slidination.find('li.slider-nav-' + slider.vars.current).addClass('slider-nav-active');
 		}
@@ -157,22 +183,8 @@
 		}
 	
 		function xc1SliderImages(infiniteSlider) {
-			var sectionHeight = infiniteSlider.height();	
 		
-			$('li img', infiniteSlider).each(function(index, item) {
-				var newImage = new Image();
-				newImage.src = $(this).attr('src');
-				var newWidth = Math.floor( newImage.width * (sectionHeight / newImage.height) );
-				var newHeight = sectionHeight;
-				
-				$(this).attr('width', newWidth).attr('height', newHeight).parent().css({'width' : newWidth + 'px', 'height' : newHeight + 'px'});
-							
-				if(index == $('li', infiniteSlider).length-1) {
-					if(infiniteSlider.data('auto') == 'auto') { var infiniteAuto = true } else { var infiniteAuto = false }
-					if(infiniteSlider.data('speed') == '') { var infiniteSpeed = 70 } else { var infiniteSpeed = infiniteSlider.data('speed'); }	
-					xc1SliderInit(infiniteSlider, infiniteAuto, infiniteSpeed);
-				}
-			});
+			
 		}
 	}
 

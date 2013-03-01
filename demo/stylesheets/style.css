@@ -21,9 +21,15 @@ footer { height: 100px; }
 		
 	
 /* Lifted corners */
-.slider-container { display: block; -moz-border-radius:4px; border-radius:4px; position:relative; background: rgba(0, 0, 0, 0.5); -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset; -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset; box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset; }
-.slider-container:before, .slider-container:after { content:""; position:absolute; z-index:-2; bottom:15px; left:10px; width:50%; height:20%; max-width:300px; -webkit-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7); -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7); box-shadow:0 15px 10px rgba(0, 0, 0, 0.7); -webkit-transform:rotate(-3deg); -moz-transform:rotate(-3deg); -ms-transform:rotate(-3deg); -o-transform:rotate(-3deg); transform:rotate(-3deg); }
-.slider-container:after { right:10px; left:auto; -webkit-transform:rotate(3deg); -moz-transform:rotate(3deg); -ms-transform:rotate(3deg); -o-transform:rotate(3deg); transform:rotate(3deg); }
+.slider { display: block; -moz-border-radius:4px; border-radius:4px; position:relative; background: #111; -webkit-box-shadow:0 2px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset; -moz-box-shadow:0 2px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset; box-shadow:0 2px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset; z-index: 1; }
+
+.slider-container { background: #111; }
+
+.slider:before, .slider:after { content:""; position:absolute; z-index: -1; bottom: 10px; width:50%; height:20px; max-width:340px; -webkit-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7); -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7); box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);  }
+.slider:before { left: 10px; -webkit-transform:rotate(-3deg); -moz-transform:rotate(-3deg); -ms-transform:rotate(-3deg); -o-transform:rotate(-3deg); transform:rotate(-3deg); }
+.slider:after { right:10px; -webkit-transform:rotate(3deg); -moz-transform:rotate(3deg); -ms-transform:rotate(3deg); -o-transform:rotate(3deg); transform:rotate(3deg); }
+
+
 
 /* desert scheme ported from vim to google prettify */
 pre { display: block; padding: 10px; -moz-border-radius:4px; border-radius:4px; position:relative; background: rgba(0, 0, 0, 0.3); -webkit-box-shadow:0 5px 10px rgba(0, 0, 0, 0.5) inset; -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5) inset; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5) inset; border-bottom: 1px solid rgba(255, 255, 255, 0.2);}
