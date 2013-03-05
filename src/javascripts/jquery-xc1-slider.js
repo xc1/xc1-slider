@@ -29,7 +29,8 @@
 			end: 'touchend mouseup'
 		};
 		slider.scroll = {
-			sliderheight: ''
+			sliderheight: '',
+			sliderwidth: ''
 		};
 
 		// Set certain values
@@ -52,6 +53,7 @@
 			// Set the same height on all the images
 			slider.find('img').each(function(index, item) {
 				if(index == 0) { slider.scroll.sliderheight = $(this).height(); } else if($(this).height() < slider.scroll.sliderheight ) { slider.scroll = $(this).height(); }
+				
 				if(index == slider.markup.slide.length-1) {
 					slider.find('img').each(function(index, item) {						
 						var image = new Image();
@@ -60,18 +62,22 @@
 						var imageheight = slider.scroll.sliderheight;
 						$(this).attr('width', imagewidth).attr('height', imageheight);
 						
-						if(index == slider.markup.slide.length-1) {
-							slider.markup.slides.css({'height' : slider.scroll.sliderheight});
+						slider.scroll.sliderwidth = Math.round(slider.scroll.sliderwidth + imagewidth);
+						
+						if(index == slider.markup.slide.length-1) {							
+							// Set Max, Min and Total values
+							slider.vars.min = slider.scroll.sliderwidth;
+							slider.vars.max = slider.scroll.sliderwidth*2;
+							slider.vars.total = slider.scroll.sliderwidth*3;		
+
+							slider.markup.slides.css({'height' : slider.scroll.sliderheight, 'width' : slider.vars.total});
+							
+							console.log(slider.markup.clonebefore.width() + ' ' + slider.markup.slides.width() + ' ' + slider.markup.cloneafter.width() + ' ' + slider.vars.total + ' ' + slider.vars.max + ' ' + slider.vars.min);
 						}
 					});
 				}
 			});
 
-			// Set Max, Min and Total values
-			slider.vars.min = slider.markup.clonebefore.width();
-			slider.vars.max = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width());
-			slider.vars.total = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width() + slider.markup.cloneafter.width() );
-			
 			slider.vars.intervalspeed = slider.vars.speed/50;
 	
 		}
@@ -91,6 +97,9 @@
 			slider.vars.min = slider.markup.clonebefore.width();
 			slider.vars.max = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width());
 			slider.vars.total = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width() + slider.markup.cloneafter.width() );
+			
+			slider.markup.slides.css({'width' : slider.vars.total + 'px'});
+
 		}
 		
 		// Fade effect setup
@@ -121,7 +130,6 @@
 		slider.nav.slidination.append(slider.nav.slides);
 
 		
-		slider.markup.slides.css({'width' : slider.vars.total + 'px'});
 	
 		// Interactions
 		slider.nav.backward.on('click', function() { backward(); });
