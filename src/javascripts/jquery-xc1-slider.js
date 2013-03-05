@@ -5,7 +5,7 @@
 	// xc1Slider
 	$.xc1Slider = function(slider, options) {
 	  	
-	  	/* Vars */
+	  	// Vars
 		slider.vars = $.extend({}, $.xc1Slider.defaults, options);
 		slider.markup = {
 			slider: slider.addClass('slider'), // Main slider
@@ -32,14 +32,23 @@
 			sliderheight: ''
 		};
 
-		// Scroll effect specials
+		// Set certain values
+		slider.vars.intervalspeed = slider.vars.delay;
+
+
+		// Add markup
+		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
+
+		// Scroll effect setup
 		if(slider.vars.effect == 'scroll') { 
 			
 			// Set scroll vars
 			slider.markup.clonebefore = slider.find('.slide').clone().addClass('clone clone-before');
-			slider.markup.cloneafter = slider.find('.slide').clone().addClass('clone clone-after');
-			
+			slider.markup.cloneafter = slider.find('.slide').clone().addClass('clone clone-after');	
 
+			slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
+			slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones		
+			
 			// Set the same height on all the images
 			slider.find('img').each(function(index, item) {
 				if(index == 0) { slider.scroll.sliderheight = $(this).height(); } else if($(this).height() < slider.scroll.sliderheight ) { slider.scroll = $(this).height(); }
@@ -49,43 +58,56 @@
 						image.src = $(this).attr('src');
 						var imagewidth = Math.floor( image.width * (slider.scroll.sliderheight / image.height) );
 						var imageheight = slider.scroll.sliderheight;
-						$(this).attr('width', imagewidth).attr('height', imageheight).parent().css({'width' : imagewidth + 'px', 'height' : imageheight + 'px'});
+						$(this).attr('width', imagewidth).attr('height', imageheight);
+						
+						if(index == slider.markup.slide.length-1) {
+							slider.markup.slides.css({'height' : slider.scroll.sliderheight});
+						}
 					});
 				}
 			});
+
+			// Set Max, Min and Total values
+			slider.vars.min = slider.markup.clonebefore.width();
+			slider.vars.max = slider.markup.cloneafter.width();
+			slider.vars.total = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width() + slider.markup.cloneafter.width() );
 			
+			slider.vars.intervalspeed = slider.vars.speed;
+	
 		}
 		
-		// Slide effect specials
+		// Slide effect setup
 		if(slider.vars.effect == 'slide') {
 
-			slider.markup.clonebefore = slider.find('.slide').clone().addClass('clone clone-before');
-			slider.markup.cloneafter = slider.find('.slide').clone().addClass('clone clone-after');
-
+			slider.markup.clonebefore = slider.find('.slide:last-child').clone().addClass('clone clone-before');
+			slider.markup.cloneafter = slider.find('.slide:first-child').clone().addClass('clone clone-after');
+	
+			slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
+			slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones
+			
 			slider.find('.slide').css({'width' : slider.width() + 'px'});
+
+			// Set Max, Min and Total values
+			slider.vars.min = slider.markup.clonebefore.width();
+			slider.vars.max = slider.markup.cloneafter.width();
+			slider.vars.total = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width() + slider.markup.cloneafter.width() );
 		}
 		
-		// Fade effect specials
+		// Fade effect setup
 		if(slider.vars.effect == 'fade') {
 			slider.find('.slide').css({'width' : slider.width() + 'px'});
 		}
 
-		// Add markup
-		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
-		slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
-		slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones
+
 					
 		slider.markup.slide.each(function(index) {
-			slider.vars.min = Math.round(slider.vars.min+$(this).width());
+			//slider.vars.min = Math.round(slider.vars.min+$(this).width());
 			slider.vars.slide.push($(this).position());
 			$(this).addClass('slide-' + index);
 			slider.nav.slides = slider.nav.slides + '<li data-slide="' + index + '" class="' + ( index == 0 ? 'slider-nav-active ':'' ) + 'slider-nav-' + index + '"></li>';
 		});
 
-		// Set Max, Min and Total values
-		slider.vars.min = slider.vars.min*1;
-		slider.vars.max = slider.vars.min*2;
-		slider.vars.total = slider.vars.min*3;
+
 						
 
 		// Append the manual nav
@@ -99,12 +121,11 @@
 		slider.nav.slidination.append(slider.nav.slides);
 
 		
-		slider.markup.slides.css({'width' : slider.vars.total*2 + 'px'});
+		slider.markup.slides.css({'width' : slider.vars.total + 'px'});
 	
 		// Interactions
 		slider.nav.backward.on('click', function() { backward(); });
 		slider.nav.forward.on('click', function() { forward(); });
-		
 		slider.markup.slides.on('mouseover', function() { pause(); }).on('mouseout', function() { resume(); });
 		
 		slider.nav.slidination.find('li').on('click', function() { 
@@ -117,21 +138,26 @@
 		slider.data('loaded', 'true');	
 	
 		// Bind touch	
-		slider.bind(slider.touch.start, function(evt) { evt.preventDefault(); console.log('touchstart' + evt.pageX); });
+		slider.bind(slider.touch.start, function(evt) { evt.preventDefault(); /* console.log('touchstart' + evt.pageX); */ });
 		slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
-		slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); console.log('touchend ' + evt.pageX); });
+		slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); /* console.log('touchend ' + evt.pageX); */ });
 
 		//autoslide();	
-		if(slider.vars.effect == 'scroll') {
-			slider.vars.intervalspeed = slider.vars.speed;
-		} else {
-			slider.vars.intervalspeed = slider.vars.delay;
-		}
 	
 	
 		// IE Fixx
 		var varIE = false;
 		if($('html').hasClass('ie')) { varIE = true; }	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		/* Functions */
 		function autoslide() {
@@ -149,12 +175,14 @@
 		}
 		
 		function forward() {
+			clearInterval(slider.vars.interval);
 			slider.vars.direction = 'forward';
 			slider.vars.current++;
 			gotoslide(slider.vars.current);
 		}
 	
 		function backward() {
+			clearInterval(slider.vars.interval);
 			slider.vars.direction = 'backward';
 			slider.vars.current--;
 			gotoslide(slider.vars.current); 

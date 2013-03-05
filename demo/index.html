@@ -32,6 +32,7 @@
 					
 				<!-- The slider markup -->
 				<div class="slider">
+					<!--
 					<ul>
 						<li><img src="images/slide-1.png" /></li>
 						<li><a href="#"><img src="images/slide-2.png" /></a></li>
@@ -39,6 +40,13 @@
 						<li><img src="images/slide-4.png" /></li>
 						<li><div><img src="images/slide-5.png" /></div></li>
 						<li><img src="images/slide-6.png" /></li>
+					</ul>
+					-->
+					
+					<ul>
+						<li><img src="images/temp-1.jpg" /></li>
+						<li><a href="#"><img src="images/temp-2.jpg" /></a></li>
+						<li><div><img src="images/temp-3.jpg" /></div></li>
 					</ul>
 				</div>
 		
@@ -99,9 +107,9 @@
 		$(window).load(function() {
 			$('.slider').xc1Slider({
 				auto: true,
-				effect: 'fade', 		// Effect, slide, scroll or fade
+				effect: 'slide', 		// Effect, slide, scroll or fade
 				direction: 'forward',	// Direction, forward or backward
-				speed: 20, 				// Milliseconds each slide is shown
+				speed: 500, 			// Milliseconds each slide is shown
 				delay: 3000 			//	
 			});
 			prettyPrint();
