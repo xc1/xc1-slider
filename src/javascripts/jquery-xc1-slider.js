@@ -69,10 +69,10 @@
 
 			// Set Max, Min and Total values
 			slider.vars.min = slider.markup.clonebefore.width();
-			slider.vars.max = slider.markup.cloneafter.width();
+			slider.vars.max = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width());
 			slider.vars.total = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width() + slider.markup.cloneafter.width() );
 			
-			slider.vars.intervalspeed = slider.vars.speed;
+			slider.vars.intervalspeed = slider.vars.speed/50;
 	
 		}
 		
@@ -89,7 +89,7 @@
 
 			// Set Max, Min and Total values
 			slider.vars.min = slider.markup.clonebefore.width();
-			slider.vars.max = slider.markup.cloneafter.width();
+			slider.vars.max = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width());
 			slider.vars.total = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width() + slider.markup.cloneafter.width() );
 		}
 		
@@ -99,7 +99,7 @@
 		}
 
 
-					
+		// General effect setup		
 		slider.markup.slide.each(function(index) {
 			//slider.vars.min = Math.round(slider.vars.min+$(this).width());
 			slider.vars.slide.push($(this).position());
@@ -175,14 +175,14 @@
 		}
 		
 		function forward() {
-			clearInterval(slider.vars.interval);
+			//clearInterval(slider.vars.interval);
 			slider.vars.direction = 'forward';
 			slider.vars.current++;
 			gotoslide(slider.vars.current);
 		}
 	
 		function backward() {
-			clearInterval(slider.vars.interval);
+			//clearInterval(slider.vars.interval);
 			slider.vars.direction = 'backward';
 			slider.vars.current--;
 			gotoslide(slider.vars.current); 
@@ -194,7 +194,7 @@
 		
 		function gotoslide(slide) {
 			//slider.vars.pos = Math.floor(slider.vars.min+(slide*slider.width()));
-			if(slide > slider.vars.slide.length) { slide = 0; }
+			if(slide > slider.vars.slide.length) { slide = 0; } else if(slide < slider.vars.slide.length) { slide = slider.vars.slide.length; }
 			if(slider.vars.effect == 'fade') {
 				fadeslide(slide);
 			} else {
@@ -223,7 +223,7 @@
 		function moveslide(pos) {
 			currentslide(pos);
 			if(!varIE) {
-				slider.markup.slides.css({'transform' : 'translate3d(-' + pos + 'px, 0, 0)', 'transition' : 'all ' + slider.vars.speed/1000 + 's ease'});
+				slider.markup.slides.css({'transform' : 'translate3d(-' + pos + 'px, 0, 0)', 'transition' : 'all ' + slider.vars.speed/1000 + 's linear'});
 			} else {
 				slider.markup.slides.animate({'left' : '-' + pos + 'px'}, slider.vars.speed);
 			}
