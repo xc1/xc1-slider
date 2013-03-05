@@ -71,8 +71,6 @@
 							slider.vars.total = slider.scroll.sliderwidth*3;		
 
 							slider.markup.slides.css({'height' : slider.scroll.sliderheight, 'width' : slider.vars.total});
-							
-							console.log(slider.markup.clonebefore.width() + ' ' + slider.markup.slides.width() + ' ' + slider.markup.cloneafter.width() + ' ' + slider.vars.total + ' ' + slider.vars.max + ' ' + slider.vars.min);
 						}
 					});
 				}
