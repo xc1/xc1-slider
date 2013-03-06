@@ -36,9 +36,16 @@
 		// Set certain values
 		slider.vars.intervalspeed = slider.vars.delay;
 
-
 		// Add markup
 		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
+
+
+		// General effect setup		
+		slider.markup.slide.each(function(index) {
+			slider.vars.slide.push($(this).position());
+			$(this).addClass('slide-' + index);
+			slider.nav.slides = slider.nav.slides + '<li data-slide="' + index + '" class="' + ( index == 0 ? 'slider-nav-active ':'' ) + 'slider-nav-' + index + '"></li>';
+		});
 
 		// Scroll effect setup
 		if(slider.vars.effect == 'scroll') { 
@@ -76,7 +83,7 @@
 				}
 			});
 
-			slider.vars.intervalspeed = slider.vars.speed/50;
+			slider.vars.intervalspeed = slider.vars.speed/50; // Needs not hardcoded speed
 	
 		}
 		
@@ -93,9 +100,8 @@
 
 			// Set Max, Min and Total values
 			slider.vars.min = slider.markup.clonebefore.width();
-			slider.vars.max = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width());
-			slider.vars.total = Math.round( slider.markup.clonebefore.width() + slider.markup.slides.width() + slider.markup.cloneafter.width() );
-			
+			slider.vars.max = Math.round( slider.markup.clonebefore.width() + (slider.width()*(slider.vars.slide.length+1)));
+			slider.vars.total = Math.round( slider.markup.clonebefore.width() + (slider.width()*(slider.vars.slide.length+1)) + slider.markup.cloneafter.width() );
 			slider.markup.slides.css({'width' : slider.vars.total + 'px'});
 
 		}
@@ -104,19 +110,7 @@
 		if(slider.vars.effect == 'fade') {
 			slider.find('.slide').css({'width' : slider.width() + 'px'});
 		}
-
-
-		// General effect setup		
-		slider.markup.slide.each(function(index) {
-			//slider.vars.min = Math.round(slider.vars.min+$(this).width());
-			slider.vars.slide.push($(this).position());
-			$(this).addClass('slide-' + index);
-			slider.nav.slides = slider.nav.slides + '<li data-slide="' + index + '" class="' + ( index == 0 ? 'slider-nav-active ':'' ) + 'slider-nav-' + index + '"></li>';
-		});
-
-
 						
-
 		// Append the manual nav
 		slider.append(slider.nav.container);
 		
@@ -173,25 +167,37 @@
 				if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
 					if(slider.vars.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
 				} else {
-					if(slider.vars.direction == 'forward') { slider.vars.pos = slider.vars.min; } else { slider.vars.pos = slider.vars.max;	}
+					resetslide();
 				}
 				if(slider.vars.effect == 'scroll') { moveslide(slider.vars.pos); } else { if(slider.vars.direction == 'forward') { slider.vars.current++; gotoslide(slider.vars.current); } else { slider.vars.current--; gotoslide(slider.vars.current); } }
 		
 			}, slider.vars.intervalspeed);
 		}
 		
+		function resetslide() {
+		
+			if(slider.vars.direction == 'forward') { slider.vars.pos = slider.vars.min; } else { slider.vars.pos = slider.vars.max;	}
+			
+			if(!varIE) {
+				slider.markup.slides.css({'transform' : 'translate3d(-' + slider.vars.pos + 'px, 0, 0)', 'transition' : 'none ' + slider.vars.speed/1000 + 's linear'});
+			} else {
+				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
+			}
+			gotoslide(slider.vars.current);
+		}
+		
 		function forward() {
-			//clearInterval(slider.vars.interval);
+			clearInterval(slider.vars.interval);
 			slider.vars.direction = 'forward';
 			slider.vars.current++;
-			gotoslide(slider.vars.current);
+			if(slider.vars.current > slider.vars.slide.length) { slider.vars.current = 0; resetslide(); } else { gotoslide(slider.vars.current); }
 		}
 	
 		function backward() {
-			//clearInterval(slider.vars.interval);
+			clearInterval(slider.vars.interval);
 			slider.vars.direction = 'backward';
 			slider.vars.current--;
-			gotoslide(slider.vars.current); 
+			if(slider.vars.current < slider.vars.slide.length) { slider.vars.current = 0; resetslide(); } else { gotoslide(slider.vars.current); }
 		}
 		
 		function pause() {
@@ -200,7 +206,7 @@
 		
 		function gotoslide(slide) {
 			//slider.vars.pos = Math.floor(slider.vars.min+(slide*slider.width()));
-			if(slide > slider.vars.slide.length) { slide = 0; } else if(slide < slider.vars.slide.length) { slide = slider.vars.slide.length; }
+			
 			if(slider.vars.effect == 'fade') {
 				fadeslide(slide);
 			} else {
