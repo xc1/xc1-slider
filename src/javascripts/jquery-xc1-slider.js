@@ -8,6 +8,7 @@
 	  	// Vars
 		slider.settings = $.extend({}, $.xc1Slider.defaults, options);
 		slider.fn = {};
+		slider.setup = {};
 		slider.vars = {
 			total: 0,
 			pos: 0,
@@ -42,122 +43,9 @@
 			end: 'touchend mouseup'
 		};
 
-
-		// Set certain values
-		slider.vars.intervalspeed = slider.settings.delay;
-
-		// Add markup
-		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
-
-		// Scroll effect setup
-		if(slider.settings.effect == 'scroll') { 
-			
-			// Set scroll vars
-			slider.markup.clonebefore = slider.find('.slide').clone().addClass('clone clone-before');
-			slider.markup.cloneafter = slider.find('.slide').clone().addClass('clone clone-after');	
-
-			slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
-			slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones		
-			
-			// Set the same height on all the images
-			slider.find('img').each(function(index, item) {
-				if(index == 0) { slider.vars.sliderheight = $(this).height(); } else if($(this).height() < slider.vars.sliderheight ) { slider.vars.sliderheight = $(this).height(); }
-				
-				if(index == slider.markup.slide.length-1) {
-					slider.find('img').each(function(index, item) {						
-						var image = new Image();
-						image.src = $(this).attr('src');
-						var imagewidth = Math.floor( image.width * (slider.vars.sliderheight / image.height) );
-						var imageheight = slider.markup.sliderheight;
-						$(this).attr('width', imagewidth).attr('height', imageheight);
-						
-						slider.vars.sliderwidth = Math.round(slider.vars.sliderwidth + imagewidth);
-						
-						if(index == slider.markup.slide.length-1) {							
-							// Set Max, Min and Total values
-							slider.vars.min = slider.vars.sliderwidth;
-							slider.vars.max = slider.vars.sliderwidth*2;
-							slider.vars.total = slider.vars.sliderwidth*3;		
-
-							slider.markup.slides.css({'height' : slider.vars.sliderheight, 'width' : slider.vars.total});
-						}
-					});
-				}
-			});
-
-			slider.vars.intervalspeed = slider.settings.speed/50; // Needs not hardcoded speed
-	
-		}
-		
-		// Slide effect setup
-		if(slider.settings.effect == 'slide') {
-
-			slider.markup.clonebefore = slider.find('.slide:last-child').clone().addClass('clone clone-before');
-			slider.markup.cloneafter = slider.find('.slide:first-child').clone().addClass('clone clone-after');
-	
-			slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
-			slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones
-			
-			slider.find('.slide').css({'width' : slider.width() + 'px'});
-
-			// Set Max, Min and Total values
-			slider.vars.min = slider.markup.clonebefore.width();
-			slider.vars.max = Math.round( slider.markup.clonebefore.width() + (slider.width()*(slider.markup.slide.length+1)));
-			slider.vars.total = Math.round( slider.markup.clonebefore.width() + (slider.width()*(slider.markup.slide.length+1)) + slider.markup.cloneafter.width() );
-
-			
-			slider.markup.slides.css({'width' : slider.vars.total + 'px'});
-
-		}
-		
-		// Fade effect setup
-		if(slider.settings.effect == 'fade') {
-			slider.find('.slide').css({'width' : slider.width() + 'px'});
-		}
-
-		// General effect setup		
-		slider.markup.slide.each(function(index) {
-			slider.vars.slide.push($(this).position());
-			$(this).addClass('slide-' + index);
-			slider.nav.slides = slider.nav.slides + '<li data-slide="' + index + '" class="' + ( index == 0 ? 'slider-nav-active ':'' ) + 'slider-nav-' + index + '"></li>';
-		});	
-						
-		// Append the manual nav
-		slider.append(slider.nav.container);
-		
-		slider.nav.container.append(slider.nav.slidination);
-		slider.nav.container.append(slider.nav.direction);
-		
-		slider.nav.direction.append(slider.nav.forward);
-		slider.nav.direction.append(slider.nav.backward);	
-		slider.nav.slidination.append(slider.nav.slides);
-
-	
-	
-		// Interactions
-		slider.nav.backward.on('click', function() { slider.fn.backward(); });
-		slider.nav.forward.on('click', function() { slider.fn.forward(); });
-		slider.markup.slides.on('mouseover', function() { slider.fn.pause(); }).on('mouseout', function() { slider.fn.resume(); });
-		
-		slider.nav.slidination.find('li').on('click', function() { 
-			slider.fn.show($(this).data('slide'));
-		});
-			
-		// Set the slider as loaded
-		slider.data('loaded', 'true');	
-	
-		// Bind touch	
-		slider.bind(slider.touch.start, function(evt) { evt.preventDefault(); /* console.log('touchstart' + evt.pageX); */ });
-		slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
-		slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); /* console.log('touchend ' + evt.pageX); */ });
-	
-	
 		// IE Fixx
 		var varIE = false;
 		if($('html').hasClass('ie')) { varIE = true; }	
-		
-		
-		
 		
 		// Functions
 		slider.fn.auto = function() {
@@ -171,8 +59,7 @@
 			clearInterval(slider.vars.interval);
 			slider.settings.direction = 'forward';
 			slider.vars.current++;
-			slider.fn.current();
-			
+			slider.fn.show(slider.vars.current);
 			slider.dev.log('FORW slider.vars.current ' + slider.vars.current);
 		}
 	
@@ -180,8 +67,7 @@
 			clearInterval(slider.vars.interval);
 			slider.settings.direction = 'backward';
 			slider.vars.current--;
-			slider.fn.current();
-			
+			slider.fn.show(slider.vars.current);
 			slider.dev.log('BACK slider.vars.current ' + slider.vars.current);
 		}
 		
@@ -289,7 +175,125 @@
 		}
 
 		*/
+		
+		slider.setup.scroll = function() {
 				
+			// Set scroll vars
+			slider.markup.clonebefore = slider.find('.slide').clone().addClass('clone clone-before');
+			slider.markup.cloneafter = slider.find('.slide').clone().addClass('clone clone-after');	
+
+			slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
+			slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones		
+			
+			// Set the same height on all the images
+			slider.find('img').each(function(index, item) {
+				if(index == 0) { slider.vars.sliderheight = $(this).height(); } else if($(this).height() < slider.vars.sliderheight ) { slider.vars.sliderheight = $(this).height(); }
+				
+				if(index == slider.markup.slide.length-1) {
+					slider.find('img').each(function(index, item) {						
+						var image = new Image();
+						image.src = $(this).attr('src');
+						var imagewidth = Math.floor( image.width * (slider.vars.sliderheight / image.height) );
+						var imageheight = slider.markup.sliderheight;
+						$(this).attr('width', imagewidth).attr('height', imageheight);
+						
+						slider.vars.sliderwidth = Math.round(slider.vars.sliderwidth + imagewidth);
+						
+						if(index == slider.markup.slide.length-1) {							
+							// Set Max, Min and Total values
+							slider.vars.min = slider.vars.sliderwidth;
+							slider.vars.max = slider.vars.sliderwidth*2;
+							slider.vars.total = slider.vars.sliderwidth*3;		
+							
+							
+							slider.markup.slides.css({'height' : slider.vars.sliderheight, 'width' : slider.vars.total});
+						}
+					});
+				}
+			});
+			
+			slider.vars.intervalspeed = slider.settings.speed/50; // Needs not hardcoded speed
+			slider.setup.markup();
+		}
+		
+		slider.setup.slide = function() {
+			
+			slider.markup.clonebefore = slider.find('.slide:last-child').clone().addClass('clone clone-before');
+			slider.markup.cloneafter = slider.find('.slide:first-child').clone().addClass('clone clone-after');
+	
+			slider.markup.slides.prepend(slider.markup.clonebefore); // Prepend the clones
+			slider.markup.slides.append(slider.markup.cloneafter); // Append the other clones
+			
+			slider.find('.slide').css({'width' : slider.width() + 'px'});
+
+			// Set Max, Min and Total values
+			slider.vars.min = slider.markup.clonebefore.width();
+			slider.vars.max = Math.round( slider.markup.clonebefore.width() + (slider.width()*(slider.markup.slide.length+1)));
+			slider.vars.total = Math.round( slider.markup.clonebefore.width() + (slider.width()*(slider.markup.slide.length+1)) + slider.markup.cloneafter.width() );
+			
+			slider.vars.pos = Math.round(slider.vars.min + (slider.width()*slider.vars.current));
+			
+			if(!varIE) {
+				slider.markup.slides.css({'transform' : 'translate3d(-' + slider.vars.pos + 'px, 0, 0)', 'transition' : 'none'});
+			} else {
+				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
+			}
+			
+			slider.markup.slides.css({'width' : slider.vars.total + 'px'});
+
+			slider.setup.markup();
+		}
+		
+		slider.setup.fade = function() {
+			slider.find('.slide').css({'width' : slider.width() + 'px'});
+			slider.setup.markup();
+		}
+		
+		slider.setup.markup = function() {
+			// General effect setup		
+			slider.markup.slide.each(function(index) {
+				slider.vars.slide.push($(this).position());
+				$(this).addClass('slide-' + index);
+				slider.nav.slides = slider.nav.slides + '<li data-slide="' + index + '" class="' + ( index == slider.vars.current ? 'slider-nav-active ':'' ) + 'slider-nav-' + index + '"></li>';
+			});	
+						
+			// Append the manual nav
+			slider.append(slider.nav.container);
+			
+			slider.nav.container.append(slider.nav.slidination);
+			slider.nav.container.append(slider.nav.direction);
+			
+			slider.nav.direction.append(slider.nav.forward);
+			slider.nav.direction.append(slider.nav.backward);	
+			slider.nav.slidination.append(slider.nav.slides);
+			slider.setup.init();
+
+		}
+		
+		slider.setup.init = function() {
+			
+			// Interactions
+			slider.nav.backward.on('click', function() { slider.fn.backward(); });
+			slider.nav.forward.on('click', function() { slider.fn.forward(); });
+			slider.markup.slides.on('mouseover', function() { slider.fn.pause(); }).on('mouseout', function() { slider.fn.resume(); });
+			
+			slider.nav.slidination.find('li').on('click', function() { 
+				slider.fn.show($(this).data('slide'));
+			});
+				
+			// Set the slider as loaded
+			slider.data('loaded', 'true');	
+		
+			// Bind touch	
+			slider.bind(slider.touch.start, function(evt) { evt.preventDefault(); /* console.log('touchstart' + evt.pageX); */ });
+			slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
+			slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); /* console.log('touchend ' + evt.pageX); */ });
+		
+		
+
+
+		}
+							
 		// Development environment
 		slider.dev = { env: false, log: function(){} }
 		if(document.domain == 'xc1-slider.dev' || document.domain == 'http://xc1-slider.dev') { slider.dev.env = true; }
@@ -298,6 +302,22 @@
 				console.log(log);
 			}
 		}
+		
+
+		// Set certain values
+		slider.vars.intervalspeed = slider.settings.delay;
+
+		// Add markup
+		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
+
+		// Scroll effect setup
+		if(slider.settings.effect == 'scroll') { slider.setup.scroll(); }
+		
+		// Slide effect setup
+		if(slider.settings.effect == 'slide') { slider.setup.slide(); }
+		
+		// Fade effect setup
+		if(slider.settings.effect == 'fade') { slider.setup.fade(); }
 
 	}
 
