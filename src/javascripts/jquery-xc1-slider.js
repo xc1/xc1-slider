@@ -9,19 +9,6 @@
 		slider.settings = $.extend({}, $.xc1Slider.defaults, options);
 		slider.fn = {};
 		slider.setup = {};
-		slider.vars = {
-			total: 0,
-			pos: 0,
-			min: 0,
-			max: 0,
-			length: 0,
-			current: slider.settings.current,
-			slide: new Array(),
-			interval: '',
-			intervalspeed: 50,
-			sliderheight: '',
-			sliderwidth: ''
-		};
 		slider.markup = {
 			slider: slider.addClass('slider'), // Main slider
 			container: $('<div class="slider-container" />'), // The container for the slides
@@ -38,6 +25,19 @@
 			backward: $('<li class="slider-nav-backward">&gt;</li>'),
 			slides: ''
 		};
+		slider.vars = {
+			total: 0,
+			pos: 0,
+			min: 0,
+			max: 0,
+			length: slider.markup.slide.length-1,
+			current: slider.settings.current,
+			slide: new Array(),
+			interval: '',
+			intervalspeed: 50,
+			sliderheight: '',
+			sliderwidth: ''
+		};
 		slider.touch = {
 			start: 'touchstart mousedown',
 			move: 'touchmove mousemove',
@@ -52,6 +52,12 @@
 		slider.fn.auto = function() {
 			clearInterval(slider.vars.interval);
 			slider.vars.interval = setInterval(function() {
+			
+				if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max && slider.settings.effect == 'scroll') {
+					if(slider.settings.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
+					slider.fn.animate(slider.vars.pos);
+				}
+			
 				slider.dev.log('Auto');
 				slider.dev.log('slider.vars.current ' + slider.vars.current);
 				slider.dev.log('slider.vars.pos ' + slider.vars.pos);
@@ -115,7 +121,13 @@
 		slider.fn.show = function(slide) {
 
 			slider.vars.current = slide;
-			slider.vars.pos = slider.vars.slide[slide].left;
+			if(slider.vars.current > slider.vars.length) {
+				slider.vars.current = 0;
+			} else if(slider.vars.current < 0) {
+				slider.vars.current = slider.vars.length;
+			}
+			
+			slider.vars.pos = slider.vars.slide[slider.vars.current].left;
 
 			/*
 
@@ -123,11 +135,7 @@
 				slider.fn.show(slider.vars.current);
 			}, slider.vars.speed);
 			slider.dev.log('RESET slider.vars.current ' + slider.vars.current);
-				if (slider.vars.pos >= slider.vars.min && slider.vars.pos <= slider.vars.max) {
-					if(slider.settings.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
-				} else {
-					slider.fn.reset();
-				}
+
 				
 				
 			if(slider.settings.effect == 'scroll') { moveslide(slider.vars.pos); } else { if(slider.settings.direction == 'forward') { slider.vars.current++; slider.fn.show(slider.vars.current); } else { slider.vars.current--; slider.fn.show(slider.vars.current); } }
@@ -153,7 +161,7 @@
 			}
 			//if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.slide.length && slider.settings.direction == 'forward') || (slider.vars.pos <= slider.vars.min && slider.settings.direction == 'backward' && slider.settings.effect == 'scroll') || (slider.vars.pos >= slider.vars.max && slider.settings.direction == 'forward' && slider.settings.effect == 'scroll')) { slider.fn.reset(); }
 			
-			if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.length && slider.settings.direction == 'forward')) { slider.fn.reset(); }
+			setTimeout(function() { if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.length && slider.settings.direction == 'forward')) { slider.fn.reset(); } }, slider.settings.speed);
 			
 			slider.dev.log('Animate');
 			slider.dev.log('slider.vars.current ' + slider.vars.current);
@@ -196,7 +204,8 @@
 		*/
 		// Setup functions
 		slider.setup.scroll = function() {
-				
+			slider.dev.log('Length ' + slider.vars.length);
+	
 			// Set scroll vars
 			slider.markup.clonebefore = slider.find('.slide').clone().addClass('clone clone-before');
 			slider.markup.cloneafter = slider.find('.slide').clone().addClass('clone clone-after');	
@@ -309,7 +318,6 @@
 			slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
 			slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); /* console.log('touchend ' + evt.pageX); */ });
 		
-			slider.dev.log('Length ' + slider.vars.length);
 
 
 		}
@@ -347,7 +355,7 @@
 		direction: 'forward',			//
 		speed: 500, 					// Milliseconds each slide is shown
 		delay: 3000, 					//
-		current: 1,						// The current slide, to start on another slide
+		current: 0,						// The current slide, to start on another slide
 	}
 	
 	//xc1Slider: Plugin
