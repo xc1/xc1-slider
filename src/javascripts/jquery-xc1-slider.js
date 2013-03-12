@@ -63,6 +63,7 @@
 			slider.settings.direction = 'forward';
 			slider.vars.current++;
 			slider.fn.show(slider.vars.current);
+			
 			slider.dev.log('Forward');
 			slider.dev.log('slider.vars.current ' + slider.vars.current);
 			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
@@ -73,6 +74,7 @@
 			slider.settings.direction = 'backward';
 			slider.vars.current--;
 			slider.fn.show(slider.vars.current);
+			
 			slider.dev.log('Backward');
 			slider.dev.log('slider.vars.current ' + slider.vars.current);
 			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
@@ -110,6 +112,18 @@
 			slider.dev.log('Reset');
 			slider.dev.log('slider.vars.current ' + slider.vars.current);
 			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
+		}
+		
+		slider.fn.route = function() {
+			if(slider.settings.effect == 'scroll') {
+				
+			}
+			if(slider.settings.effect == 'slide') { 
+				
+			}
+			if(slider.settings.effect == 'fade') {
+			
+			}
 		}
 						
 		slider.fn.show = function(slide) {
