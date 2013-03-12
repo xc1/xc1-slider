@@ -45,39 +45,20 @@
 		slider.fn.auto = function() {
 			clearInterval(slider.vars.interval);
 			slider.vars.interval = setInterval(function() {
-				if(slider.settings.effect == 'scroll') {
-					if(slider.settings.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
-					slider.fn.animate(slider.vars.pos);
-				}
-				
-			
-				slider.dev.log('Auto');
-				slider.dev.log('slider.vars.current ' + slider.vars.current);
-				slider.dev.log('slider.vars.pos ' + slider.vars.pos);
-				
+				slider.fn.route('advance');	
 			}, slider.vars.intervalspeed);
 		}
 		
 		slider.fn.forward = function() {
 			clearInterval(slider.vars.interval);
 			slider.settings.direction = 'forward';
-			slider.vars.current++;
-			slider.fn.show(slider.vars.current);
-			
-			slider.dev.log('Forward');
-			slider.dev.log('slider.vars.current ' + slider.vars.current);
-			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
+			slider.fn.route('forward');
 		}
 	
 		slider.fn.backward = function() {
 			clearInterval(slider.vars.interval);
 			slider.settings.direction = 'backward';
-			slider.vars.current--;
-			slider.fn.show(slider.vars.current);
-			
-			slider.dev.log('Backward');
-			slider.dev.log('slider.vars.current ' + slider.vars.current);
-			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
+			slider.fn.route('backward');
 		}
 		
 		slider.fn.pause = function() {
@@ -107,24 +88,9 @@
 			} else {
 				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
 			}
-			
-			//slider.fn.current();
-			slider.dev.log('Reset');
-			slider.dev.log('slider.vars.current ' + slider.vars.current);
-			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
+			slider.fn.route('reset');
 		}
-		
-		slider.fn.route = function() {
-			if(slider.settings.effect == 'scroll') {
-				
-			}
-			if(slider.settings.effect == 'slide') { 
-				
-			}
-			if(slider.settings.effect == 'fade') {
-			
-			}
-		}
+
 						
 		slider.fn.show = function(slide) {
 
@@ -153,7 +119,6 @@
 			} else {
 				slider.markup.slides.animate({'left' : '-' + pos + 'px'}, slider.settings.speed);
 			}
-			//if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.slide.length && slider.settings.direction == 'forward') || (slider.vars.pos <= slider.vars.min && slider.settings.direction == 'backward' && slider.settings.effect == 'scroll') || (slider.vars.pos >= slider.vars.max && slider.settings.direction == 'forward' && slider.settings.effect == 'scroll')) { slider.fn.reset(); }
 			
 			setTimeout(function() { if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.length && slider.settings.direction == 'forward')) { slider.fn.reset(); } }, slider.settings.speed);
 			
@@ -164,8 +129,6 @@
 		
 		slider.fn.current = function()  {
 		
-			//if(slider.vars.current > slider.vars.slide.length) { slider.vars.current = 0; slider.fn.reset(); } else { slider.fn.show(slider.vars.current); }
-			//if(slider.vars.current < slider.vars.slide.length) { slider.vars.current = 0; slider.fn.reset(); } else { slider.fn.show(slider.vars.current); }
 			if(slider.settings.effect == 'scroll') {
 				for(var i = 0; i < slider.vars.slide.length-1; i++) {				
 					if(slider.vars.pos > (slider.vars.slide[i].left-(slider.width()/2))) {
@@ -180,10 +143,39 @@
 			slider.dev.log('slider.vars.current ' + slider.vars.current);
 			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
 		}
+		
+		// The effects
+		slider.fn.route = function(fn) {
+			if(slider.settings.effect == 'scroll') { slider.fn.scroll(fn); }
+			if(slider.settings.effect == 'slide') { slider.fn.slide(fn); }
+			if(slider.settings.effect == 'fade') { slider.fn.fade(fn); }
+		}
+		
+		slider.fn.scroll = function(fn) {
+			if(slider.settings.effect == 'scroll') {
+				if(slider.settings.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
+				slider.fn.animate(slider.vars.pos);
+			}
+			
+			slider.dev.log(fn);
+			slider.dev.log('slider.vars.current ' + slider.vars.current);
+			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
+		}
+		
+		slider.fn.slide = function(fn) {
+			// Forward
+			slider.vars.current++;
+			slider.fn.show(slider.vars.current);
+			// Backward
+			slider.vars.current--;
+			slider.fn.show(slider.vars.current);
 
-		/*
+			slider.dev.log(fn);
+			slider.dev.log('slider.vars.current ' + slider.vars.current);
+			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
+		}
 
-		function fadeslide(slide) {
+		slider.fn.fade = function(fn) {
 			if(!varIE) {
 				slider.markup.slides.find('.slide-' + slide).css({'z-index' : '15', 'opacity' : '1', 'transition' : 'all ' + slider.settings.speed/1000 + 's ease'});
 			} else {
@@ -193,9 +185,12 @@
 				slider.markup.slides.find('.slide').css({'z-index' : '5'});
 				slider.markup.slides.find('.slide-' + slide).css({'z-index' : '10'});
 			}, slider.settings.speed);
+			
+			slider.dev.log(fn);
+			slider.dev.log('slider.vars.current ' + slider.vars.current);
+			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
 		}
 
-		*/
 		// Setup functions
 		slider.setup.scroll = function() {
 			slider.dev.log('Length ' + slider.vars.length);
