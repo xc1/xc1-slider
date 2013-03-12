@@ -66,12 +66,63 @@
 		}
 	
 		slider.fn.resume = function() {
-			if(slider.settings.auto == true) {
-				slider.fn.auto();		
-			}
+			if(slider.settings.auto == true) { slider.fn.auto(); }
 		}
 		
 		slider.fn.reset = function() {
+			slider.fn.route('reset');
+		}
+
+		slider.fn.show = function(slide) {
+			slider.vars.current = slide;
+			if(slider.vars.current > slider.vars.length) {
+				slider.vars.current = 0;
+			} else if(slider.vars.current < 0) {
+				slider.vars.current = slider.vars.length;
+			}
+			slider.vars.pos = slider.vars.slide[slider.vars.current].left;
+			slider.fn.current();
+			slider.fn.animate(slider.vars.pos);		
+		}
+		
+		slider.fn.animate = function(pos) {
+			if((slider.vars.pos <= slider.vars.min && slider.settings.direction == 'backward' && slider.settings.effect == 'scroll') || (slider.vars.pos >= slider.vars.max && slider.settings.direction == 'forward' && slider.settings.effect == 'scroll')) { slider.fn.reset(); }
+			if(slider.settings.effect == 'scroll') { slider.fn.current(pos); }
+			if(!varIE) {
+				slider.markup.slides.css({'transform' : 'translate3d(-' + pos + 'px, 0, 0)', 'transition' : 'all ' + slider.settings.speed/1000 + 's linear'});
+			} else {
+				slider.markup.slides.animate({'left' : '-' + pos + 'px'}, slider.settings.speed);
+			}
+			setTimeout(function() { if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.length && slider.settings.direction == 'forward')) { slider.fn.reset(); } }, slider.settings.speed);
+		}
+		
+		slider.fn.current = function()  {
+			
+			slider.nav.slidination.find('li').removeClass('slider-nav-active');
+			slider.nav.slidination.find('li.slider-nav-' + slider.vars.current).addClass('slider-nav-active');
+		}
+		
+		// The effects
+		slider.fn.route = function(fn) {
+			slider.fn[slider.settings.effect](fn);
+		}
+		
+		slider.fn.scroll = function(fn) {
+		
+			// Current
+			if(slider.settings.effect == 'scroll') {
+				for(var i = 0; i < slider.vars.slide.length-1; i++) {				
+					if(slider.vars.pos > (slider.vars.slide[i].left-(slider.width()/2))) {
+						slider.vars.current = i;
+					}
+				}						
+			}
+		
+		
+			if(slider.settings.effect == 'scroll') {
+				if(slider.settings.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
+				slider.fn.animate(slider.vars.pos);
+			}
 			
 			if(slider.settings.direction == 'forward') {
 				slider.vars.pos = 0;
@@ -88,74 +139,7 @@
 			} else {
 				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
 			}
-			slider.fn.route('reset');
-		}
-
-						
-		slider.fn.show = function(slide) {
-
-			slider.vars.current = slide;
-			if(slider.vars.current > slider.vars.length) {
-				slider.vars.current = 0;
-			} else if(slider.vars.current < 0) {
-				slider.vars.current = slider.vars.length;
-			}
 			
-			slider.vars.pos = slider.vars.slide[slider.vars.current].left;
-			
-			slider.fn.current();
-			slider.fn.animate(slider.vars.pos);		
-			
-			slider.dev.log('Show ' + slide);
-			slider.dev.log('slider.vars.current ' + slider.vars.current);
-			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
-		}
-		
-		slider.fn.animate = function(pos) {
-			if((slider.vars.pos <= slider.vars.min && slider.settings.direction == 'backward' && slider.settings.effect == 'scroll') || (slider.vars.pos >= slider.vars.max && slider.settings.direction == 'forward' && slider.settings.effect == 'scroll')) { slider.fn.reset(); }
-			if(slider.settings.effect == 'scroll') { slider.fn.current(pos); }
-			if(!varIE) {
-				slider.markup.slides.css({'transform' : 'translate3d(-' + pos + 'px, 0, 0)', 'transition' : 'all ' + slider.settings.speed/1000 + 's linear'});
-			} else {
-				slider.markup.slides.animate({'left' : '-' + pos + 'px'}, slider.settings.speed);
-			}
-			
-			setTimeout(function() { if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.length && slider.settings.direction == 'forward')) { slider.fn.reset(); } }, slider.settings.speed);
-			
-			slider.dev.log('Animate');
-			slider.dev.log('slider.vars.current ' + slider.vars.current);
-			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
-		}
-		
-		slider.fn.current = function()  {
-		
-			if(slider.settings.effect == 'scroll') {
-				for(var i = 0; i < slider.vars.slide.length-1; i++) {				
-					if(slider.vars.pos > (slider.vars.slide[i].left-(slider.width()/2))) {
-						slider.vars.current = i;
-					}
-				}						
-			}
-			slider.nav.slidination.find('li').removeClass('slider-nav-active');
-			slider.nav.slidination.find('li.slider-nav-' + slider.vars.current).addClass('slider-nav-active');
-			
-			slider.dev.log('Current');
-			slider.dev.log('slider.vars.current ' + slider.vars.current);
-			slider.dev.log('slider.vars.pos ' + slider.vars.pos);
-		}
-		
-		// The effects
-		slider.fn.route = function(fn) {
-			if(slider.settings.effect == 'scroll') { slider.fn.scroll(fn); }
-			if(slider.settings.effect == 'slide') { slider.fn.slide(fn); }
-			if(slider.settings.effect == 'fade') { slider.fn.fade(fn); }
-		}
-		
-		slider.fn.scroll = function(fn) {
-			if(slider.settings.effect == 'scroll') {
-				if(slider.settings.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
-				slider.fn.animate(slider.vars.pos);
-			}
 			
 			slider.dev.log(fn);
 			slider.dev.log('slider.vars.current ' + slider.vars.current);
@@ -286,7 +270,6 @@
 			slider.nav.direction.append(slider.nav.backward);	
 			slider.nav.slidination.append(slider.nav.slides);
 			slider.setup.init();
-
 		}
 		
 		slider.setup.init = function() {
@@ -307,9 +290,6 @@
 			slider.bind(slider.touch.start, function(evt) { evt.preventDefault(); /* console.log('touchstart' + evt.pageX); */ });
 			slider.bind(slider.touch.move, function(evt) { evt.preventDefault(); /* console.log('touchmove ' + evt.pageX); */ });
 			slider.bind(slider.touch.end, function(evt) { evt.preventDefault(); /* console.log('touchend ' + evt.pageX); */ });
-		
-
-
 		}
 							
 		// Development environment
@@ -334,7 +314,6 @@
 		if(slider.settings.effect == 'fade') { slider.setup.fade(); }
 		
 		// Here is where the fun starts! Magic!
-		
 	}
 
   
