@@ -110,36 +110,36 @@
 		slider.fn.scroll = function(fn) {
 		
 			// Current
-			if(slider.settings.effect == 'scroll') {
-				for(var i = 0; i < slider.vars.slide.length-1; i++) {				
-					if(slider.vars.pos > (slider.vars.slide[i].left-(slider.width()/2))) {
-						slider.vars.current = i;
-					}
-				}						
-			}
-		
-		
-			if(slider.settings.effect == 'scroll') {
+			for(var i = 0; i < slider.vars.slide.length-1; i++) {				
+				if(slider.vars.pos > (slider.vars.slide[i].left-(slider.width()/2))) {
+					slider.vars.current = i;
+				}
+			}						
+			
+			// Advance
+			if(fn == 'advance' || fn == 'forward' || fn == 'backward') {
 				if(slider.settings.direction == 'forward') { slider.vars.pos++; } else { slider.vars.pos--; }
 				slider.fn.animate(slider.vars.pos);
 			}
-			
-			if(slider.settings.direction == 'forward') {
-				slider.vars.pos = 0;
-				//slider.vars.pos = slider.vars.min;
-				//slider.vars.current = 0;
-			} else {
-				slider.vars.pos = slider.vars.max;
-				//slider.vars.pos = slider.vars.max;
-				//slider.vars.current = slider.vars.slide.length;
+
+			// Reset
+			if(fn == 'reset') {
+				if(slider.settings.direction == 'forward') {
+					slider.vars.pos = 0;
+					//slider.vars.pos = slider.vars.min;
+					//slider.vars.current = 0;
+				} else {
+					slider.vars.pos = slider.vars.max;
+					//slider.vars.pos = slider.vars.max;
+					//slider.vars.current = slider.vars.slide.length;
+				}
+				
+				if(!varIE) {
+					slider.markup.slides.css({'transform' : 'translate3d(-' + slider.vars.pos + 'px, 0, 0)', 'transition' : 'none'});
+				} else {
+					slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
+				}			
 			}
-			
-			if(!varIE) {
-				slider.markup.slides.css({'transform' : 'translate3d(-' + slider.vars.pos + 'px, 0, 0)', 'transition' : 'none'});
-			} else {
-				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
-			}
-			
 			
 			slider.dev.log(fn);
 			slider.dev.log('slider.vars.current ' + slider.vars.current);
@@ -147,12 +147,11 @@
 		}
 		
 		slider.fn.slide = function(fn) {
-			// Forward
-			slider.vars.current++;
-			slider.fn.show(slider.vars.current);
-			// Backward
-			slider.vars.current--;
-			slider.fn.show(slider.vars.current);
+		
+			// Advance
+			if(fn == 'advance' || fn == 'forward' || fn == 'backward') {
+				if(slider.settings.direction == 'forward') { slider.vars.current++; slider.fn.show(slider.vars.current); } else { slider.vars.current--; slider.fn.show(slider.vars.current); }
+			}
 
 			slider.dev.log(fn);
 			slider.dev.log('slider.vars.current ' + slider.vars.current);
