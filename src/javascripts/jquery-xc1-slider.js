@@ -29,17 +29,14 @@
 			length: slider.markup.slide.length-1,
 			current: slider.settings.current,
 			slide: new Array(),
-			intervalspeed: 50
+			intervalspeed: 50,
+			ie: $('html').hasClass('ie') // Needs to be fixed
 		};
 		slider.touch = {
 			start: 'touchstart mousedown',
 			move: 'touchmove mousemove',
 			end: 'touchend mouseup'
 		};
-
-		// IE Fixx
-		var varIE = false;
-		if($('html').hasClass('ie')) { varIE = true; }	
 		
 		// Functions
 		slider.fn.auto = function() {
@@ -86,18 +83,16 @@
 		}
 		
 		slider.fn.animate = function(pos) {
-			if((slider.vars.pos <= slider.vars.min && slider.settings.direction == 'backward' && slider.settings.effect == 'scroll') || (slider.vars.pos >= slider.vars.max && slider.settings.direction == 'forward' && slider.settings.effect == 'scroll')) { slider.fn.reset(); }
 			if(slider.settings.effect == 'scroll') { slider.fn.current(pos); }
-			if(!varIE) {
-				slider.markup.slides.css({'transform' : 'translate3d(-' + pos + 'px, 0, 0)', 'transition' : 'all ' + slider.settings.speed/1000 + 's linear'});
-			} else {
-				slider.markup.slides.animate({'left' : '-' + pos + 'px'}, slider.settings.speed);
-			}
+			if(!slider.vars.ie) { slider.markup.slides.css({'transform' : 'translate3d(-' + pos + 'px, 0, 0)', 'transition' : 'all ' + slider.settings.speed/1000 + 's linear'}); } else { slider.markup.slides.animate({'left' : '-' + pos + 'px'}, slider.settings.speed); }
+
+			// Reset?
+			if((slider.vars.pos <= slider.vars.min && slider.settings.direction == 'backward' && slider.settings.effect == 'scroll') || (slider.vars.pos >= slider.vars.max && slider.settings.direction == 'forward' && slider.settings.effect == 'scroll')) { slider.fn.reset(); }
 			setTimeout(function() { if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.length && slider.settings.direction == 'forward')) { slider.fn.reset(); } }, slider.settings.speed);
+
 		}
 		
 		slider.fn.current = function()  {
-			
 			slider.nav.slidination.find('li').removeClass('slider-nav-active');
 			slider.nav.slidination.find('li.slider-nav-' + slider.vars.current).addClass('slider-nav-active');
 		}
@@ -125,16 +120,12 @@
 			// Reset
 			if(fn == 'reset') {
 				if(slider.settings.direction == 'forward') {
-					slider.vars.pos = 0;
-					//slider.vars.pos = slider.vars.min;
-					//slider.vars.current = 0;
+					slider.vars.pos = slider.vars.min;
 				} else {
 					slider.vars.pos = slider.vars.max;
-					//slider.vars.pos = slider.vars.max;
-					//slider.vars.current = slider.vars.slide.length;
 				}
 				
-				if(!varIE) {
+				if(!slider.vars.ie) {
 					slider.markup.slides.css({'transform' : 'translate3d(-' + slider.vars.pos + 'px, 0, 0)', 'transition' : 'none'});
 				} else {
 					slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
@@ -159,7 +150,7 @@
 		}
 
 		slider.fn.fade = function(fn) {
-			if(!varIE) {
+			if(!slider.vars.ie) {
 				slider.markup.slides.find('.slide-' + slide).css({'z-index' : '15', 'opacity' : '1', 'transition' : 'all ' + slider.settings.speed/1000 + 's ease'});
 			} else {
 				slider.markup.slides.find('.slide-' + slide).css({'z-index' : '15'}).animate({'opacity' : ''}, slider.settings.speed);
@@ -234,7 +225,7 @@
 			
 			slider.vars.pos = Math.round(slider.vars.min + (slider.width()*slider.vars.current));
 			
-			if(!varIE) {
+			if(!slider.vars.ie) {
 				slider.markup.slides.css({'transform' : 'translate3d(-' + slider.vars.pos + 'px, 0, 0)', 'transition' : 'none'});
 			} else {
 				slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
@@ -308,9 +299,7 @@
 		slider.markup.slides.wrap(slider.markup.container);	//Wrap the slider in a container	
 
 		// Effect setup
-		if(slider.settings.effect == 'scroll') { slider.setup.scroll(); }
-		if(slider.settings.effect == 'slide') { slider.setup.slide(); }
-		if(slider.settings.effect == 'fade') { slider.setup.fade(); }
+		slider.setup[slider.settings.effect]();
 		
 		// Here is where the fun starts! Magic!
 	}
