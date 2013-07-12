@@ -28,6 +28,7 @@
 		slider.vars = {
 			length: slider.markup.slide.length-1,
 			current: slider.settings.current,
+			pos: 0,
 			slide: new Array(),
 			intervalspeed: 50,
 			ie: $('html').hasClass('ie') // Needs to be fixed
@@ -86,9 +87,6 @@
 			if(slider.settings.effect == 'scroll') { slider.fn.current(pos); }
 			if(!slider.vars.ie) { slider.markup.slides.css({'transform' : 'translate3d(-' + pos + 'px, 0, 0)', 'transition' : 'all ' + slider.settings.speed/1000 + 's linear'}); } else { slider.markup.slides.animate({'left' : '-' + pos + 'px'}, slider.settings.speed); }
 
-			// Reset?
-			if((slider.vars.pos <= slider.vars.min && slider.settings.direction == 'backward' && slider.settings.effect == 'scroll') || (slider.vars.pos >= slider.vars.max && slider.settings.direction == 'forward' && slider.settings.effect == 'scroll')) { slider.fn.reset(); }
-			setTimeout(function() { if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.length && slider.settings.direction == 'forward')) { slider.fn.reset(); } }, slider.settings.speed);
 
 		}
 		
@@ -129,7 +127,12 @@
 					slider.markup.slides.css({'transform' : 'translate3d(-' + slider.vars.pos + 'px, 0, 0)', 'transition' : 'none'});
 				} else {
 					slider.markup.slides.css({'left' : '-' + slider.vars.pos + 'px'});
-				}			
+				}		
+						
+				// Reset?
+				if((slider.vars.pos <= slider.vars.min && slider.settings.direction == 'backward' && slider.settings.effect == 'scroll') || (slider.vars.pos >= slider.vars.max && slider.settings.direction == 'forward' && slider.settings.effect == 'scroll')) { slider.fn.reset(); }
+				setTimeout(function() { if((slider.vars.current <= 0 && slider.settings.direction == 'backward') || (slider.vars.current >= slider.vars.length && slider.settings.direction == 'forward')) { slider.fn.reset(); } }, slider.settings.speed);
+	
 			}
 			
 			slider.dev.log(fn);
